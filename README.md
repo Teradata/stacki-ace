@@ -277,7 +277,7 @@ them -- the frontend Pi will install all backend Pis that are listed in
 * Grab the x86_64 isos for ***Stacki*** and ***OS***
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/stackios-4.0_c4aff2a-7.x.x86_64.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/stacki-4.0_20170414_c4aff2a-7.x.x86_64.disk1.iso
   
   # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/os-7.3_11122da-7.x.x86_64.disk1.iso
   ```
@@ -288,18 +288,18 @@ them -- the frontend Pi will install all backend Pis that are listed in
   # stack add box x86_64
   ```
 
-* Add/enable the `os` pallet:
+* Add/enable the `os` pallet for the `x86_64` box:
   
   ```
   # stack add os-7.3_11122da-7.x.x86_64.disk1.iso
-  # stack enable pallet os box=x86_64 arch=x86_64
+  # stack enable pallet os arch=x86_64 box=x86_64
   ```
 
 * Now add/enable the `stacki` pallet:
 
   ```
   # stack add pallet stacki-4.0_20170414_c4aff2a-7.x.x86_64.disk1.iso
-  # stack enable pallet stacki box=x86_64 arch=x86_64
+  # stack enable pallet stacki arch=x86_64 box=x86_64 
   ```
   
 * Install the files needed for pxeboot
@@ -318,7 +318,7 @@ them -- the frontend Pi will install all backend Pis that are listed in
   # cp -r /usr/share/syslinux/* /tftpboot/pxelinux/
   ```
   
-* Add a boot action for x86 machines. Change `IP_ADDRESS` to the ip address of the frontend machine.
+* Add a boot action for x86_64 machines. Change `IP_ADDRESS` to the ip address of the frontend machine.
 
   ```
   # stack add bootaction action=install_x86 args="ip=bootif:dhcp inst.ks=https://IP_ADDRESS/install/sbin/profile.cgi inst.geoloc=0 inst.noverifyssl inst.ks.sendmac ramdisk_size=300000" kernel="vmlinuz-4.0_20170414_c4aff2a-7.x-x86_64" ramdisk="initrd.img-4.0_20170414_c4aff2a-7.x-x86_64"
@@ -326,9 +326,9 @@ them -- the frontend Pi will install all backend Pis that are listed in
 
 ### Adding Hosts
 
-* Add your x86_64 hosts to the spreadsheet the same way as before but for appliance type use something other than ace (e.g. backend).
+* Add your x86_64 hosts to the spreadsheet the same way as before but for appliance type use **backend**.
 
-* Set the box for the host using the applaince name, otherwise the frontend will think it is installing another Pi.
+* Set the box for the host using the appliance name, otherwise the frontend will think it is installing another Pi.
 
   ```
   # stack set host box backend box=x86_64
