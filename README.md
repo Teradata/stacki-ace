@@ -271,10 +271,10 @@ them -- the frontend Pi will install all backend Pis that are listed in
 
 ---
 
-# Build x86 Backend(s)
+# Build x86_64 Backend(s)
 
 ### Requirements before adding hosts
-* Grab the x86 isos for ***Stacki*** and ***OS***
+* Grab the x86_64 isos for ***Stacki*** and ***OS***
 
   ```
   # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/stackios-4.0_c4aff2a-7.x.x86_64.disk1.iso
@@ -282,24 +282,24 @@ them -- the frontend Pi will install all backend Pis that are listed in
   # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/os-7.3_11122da-7.x.x86_64.disk1.iso
   ```
 
-* Add `x86` box.
+* Add `x86_64` box.
   
   ```
-  # stack add box x86
+  # stack add box x86_64
   ```
 
 * Add/enable the `os` pallet:
   
   ```
   # stack add os-7.3_11122da-7.x.x86_64.disk1.iso
-  # stack enable pallet os box=x86 arch=x86_64
+  # stack enable pallet os box=x86_64 arch=x86_64
   ```
 
 * Now add/enable the `stacki` pallet:
 
   ```
   # stack add pallet stacki-4.0_20170414_c4aff2a-7.x.x86_64.disk1.iso
-  # stack enable pallet stacki box=x86 arch=x86_64
+  # stack enable pallet stacki box=x86_64 arch=x86_64
   ```
   
 * Install the files needed for pxeboot
@@ -326,12 +326,12 @@ them -- the frontend Pi will install all backend Pis that are listed in
 
 ### Adding Hosts
 
-* Add your x86 hosts to the spreadsheet the same way as before but for appliance type use something other than ace (e.g. backend).
+* Add your x86_64 hosts to the spreadsheet the same way as before but for appliance type use something other than ace (e.g. backend).
 
 * Set the box for the host using the applaince name, otherwise the frontend will think it is installing another Pi.
 
   ```
-  # stack set host box backend box=x86
+  # stack set host box backend box=x86_64
   ```
   
 * Set the install action using appliance name
@@ -346,7 +346,7 @@ them -- the frontend Pi will install all backend Pis that are listed in
   # stack set host boot backend action=install
   ```
   
-* Reboot and install your x86 machine. It is regular [Stacki](https://github.com/StackIQ/stacki) from here on out.
+* Reboot and install your x86_64 machine. It is regular [Stacki](https://github.com/StackIQ/stacki) from here on out.
 
 # Full Stacki Documentation
 
