@@ -71,7 +71,7 @@ the format *sdX*.
 Now let's copy *stacki-centos.img* to the MicroSD card.
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-centos.img
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/stacki-centos.img
 
   # dd if=stacki-centos.img of=/dev/sdd
   ```
@@ -90,11 +90,11 @@ all the free space on your MicroSD card.
 * Copy the Stacki Ace ISOs to the frontend:
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/os-7.3-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/os-7.3-7.x.armv7hl.disk1.iso
 
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-4.0_20170316-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/stacki-4.1-7.x.armv7hl.disk1.iso
 
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-ace-4.0_20170329-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/stacki-ace-4.1-7.x.armv7hl.disk1.iso
   ```
 
 * Download and execute `frontend-install.py`.
@@ -102,9 +102,9 @@ all the free space on your MicroSD card.
 > This will transform the Pi into a Stacki Ace frontend.
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/frontend-install.py
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/frontend-install.py
 
-  # ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
+  # ./frontend-install.py --stacki-iso=stacki-4.1-7.x.armv7hl.disk1.iso --stacki-version=4.1 --stacki-name=stacki --extra-iso=os-7.3-7.x.armv7hl.disk1.iso
   ```
 The above step will run several commands and will eventually display
 the Installation Wizard.
@@ -170,7 +170,7 @@ installation.
 * Now add/enable the `stacki-ace` pallet:
 
   ```
-  # stack add pallet stacki-ace-4.0_20170329-7.x.armv7hl.disk1.iso
+  # stack add pallet stacki-ace-4.1-7.x.armv7hl.disk1.iso
   # stack enable pallet stacki-ace
   ```
 
@@ -179,9 +179,9 @@ installation.
   ```
   # stack list pallet
   NAME       VERSION      RELEASE ARCH    OS     BOXES
-  stacki     4.0_20170316 7.x     armv7hl redhat default
+  stacki     4.1          7.x     armv7hl redhat default
   os         7.3          7.x     armv7hl redhat default
-  stacki-ace 4.0_20170329 7.x     armv7hl redhat default
+  stacki-ace 4.1          7.x     armv7hl redhat default
   ```
 
 * Apply the `stacki-ace` pallet to the frontend:
