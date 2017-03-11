@@ -1,0 +1,12 @@
+[Unit]
+Description=stacki-install
+After=multi-user.target
+Requires=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/stack/bin/installpi.sh
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target

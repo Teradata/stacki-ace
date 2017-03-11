@@ -1,0 +1,82 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+<description>
+</description>
+
+
+<package>ace-install</package>
+<package>ace-images</package>
+<package>ace-profile</package>
+
+
+<post>
+
+<!-- configure the NFS server to accept v2 requests -->
+
+gawk '/RPCNFSDARGS/ { \
+	printf("RPCNFSDARGS=\"-V 2\"\n"); \
+	next; \
+} \
+{ print $0 }' /etc/sysconfig/nfs &gt; /tmp/nfs
+mv /tmp/nfs /etc/sysconfig/nfs
+
+mkdir -p /export/nfs/install
+
+<file name="/etc/exports">
+/export/nfs/install &Kickstart_PrivateNetwork;/&Kickstart_PrivateNetmaskCIDR;(rw,sync,no_subtree_check,no_root_squash,insecure)
+</file>
+
+rsync -xa --exclude /export / /export/nfs/install
+
+rm /export/nfs/install/etc/fstab
+rm /export/nfs/install/etc/hostname
+rm /export/nfs/install/etc/sysconfig/network
+rm /export/nfs/install/etc/sysconfig/network-scirpts/ifcfg-eth*
+
+<file name="/export/nfs/install/etc/sysconfig/network-scirpts/ifcfg-eth0">
+DEVICE=eth0
+BOOTPROTO=dhcp
+ONBOOT=yes
+MTU=1500
+</file>
+
+cp /opt/stack/systemd/stacki-install.service /export/nfs/install/usr/lib/systemd/system/
+
+echo "/usr/bin/systemctl enable stacki-install" > /export/nfs/install/tmp/systemctl.stacki
+chmod a+x /export/nfs/install/tmp/systemctl.stacki
+
+chroot /export/nfs/install /tmp/systemctl.stacki
+</post>
+
+<post>
+mkdir -p /tftpboot/pxelinux/
+
+cp /boot/* /tftpboot/pxelinux/
+cp /opt/stack/images/kernel7.img /tftpboot/pxelinux/
+
+<file name="/tftpboot/pxelinux/cmdline.txt">
+root=/dev/nfs nfsroot=&Kickstart_PrivateAddress;:/export/nfs/install rootwait ip=dhcp frontend=&Kickstart_PrivateAddress;
+</file>
+
+<file name="/tftpboot/pxelinux/config.txt">
+program_usb_boot_mode=1
+</file>
+
+</post>
+
+<post>
+
+/opt/stack/bin/stack add appliance ace longname=ACE node=stacki-ace-backend
+/opt/stack/bin/stack set appliance attr ace attr=managed value=true
+/opt/stack/bin/stack set appliance attr ace attr=kickstartable value=yes
+
+/opt/stack/bin/stack add box bullpen
+
+</post>
+
+
+</kickstart> 
+
