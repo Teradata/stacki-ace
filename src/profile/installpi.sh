@@ -3,10 +3,10 @@
 #
 # get the kickstart file
 #
-/opt/stack/bin/getprofile.py
+(cd /run ; /opt/stack/bin/getprofile.py 2>&1 | tee /run/getprofile.debug )
 
 #
 # process the kickstart file
 #
-/opt/stack/bin/ksace.py
+(cd /run ; /opt/stack/bin/ksace.py 2>&1 | tee /run/ksace.debug )
 

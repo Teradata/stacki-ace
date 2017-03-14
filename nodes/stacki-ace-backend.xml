@@ -169,7 +169,7 @@ newshadow = open('/etc/shadow.new', 'w')
 for line in f.readlines():
 	l = line.split(':')
 	if l[0] == 'root':
-		l[1] = '&Kickstart_PrivatePortableRootPassword;'
+		l[1] = '&Kickstart_PrivateRootPassword;'
 
 	newshadow.write('%s' % ':'.join(l))
 

@@ -73,7 +73,7 @@ program_usb_boot_mode=1
 /opt/stack/bin/stack set appliance attr ace attr=managed value=true
 /opt/stack/bin/stack set appliance attr ace attr=kickstartable value=yes
 
-/opt/stack/bin/stack add box bullpen
+/opt/stack/bin/stack set attr attr=bootdisk value=mmcblk0
 
 </post>
 

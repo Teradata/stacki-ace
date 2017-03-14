@@ -101,3 +101,9 @@ for script in ksparser.handler.scripts:
 		doScript('post', script, scriptnum)
 		scriptnum += 1
 
+#
+# reboot
+#
+cmd = '/usr/sbin/reboot'
+# subprocess.call(shlex.split(cmd))
+
