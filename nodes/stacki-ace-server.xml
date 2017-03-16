@@ -7,9 +7,12 @@
 </description>
 
 
-<package>ace-install</package>
-<package>ace-images</package>
-<package>ace-profile</package>
+<package>stacki-ace-install</package>
+<package>stacki-ace-images</package>
+<package>stacki-ace-profile</package>
+<package>stacki-ace-command</package>
+
+<package>nfs-utils</package>
 
 
 <post>
@@ -34,9 +37,9 @@ rsync -xa --exclude /export / /export/nfs/install
 rm /export/nfs/install/etc/fstab
 rm /export/nfs/install/etc/hostname
 rm /export/nfs/install/etc/sysconfig/network
-rm /export/nfs/install/etc/sysconfig/network-scirpts/ifcfg-eth*
+rm /export/nfs/install/etc/sysconfig/network-scripts/ifcfg-eth*
 
-<file name="/export/nfs/install/etc/sysconfig/network-scirpts/ifcfg-eth0">
+<file name="/export/nfs/install/etc/sysconfig/network-scripts/ifcfg-eth0">
 DEVICE=eth0
 BOOTPROTO=dhcp
 ONBOOT=yes
@@ -53,9 +56,7 @@ chroot /export/nfs/install /tmp/systemctl.stacki
 
 <post>
 mkdir -p /tftpboot/pxelinux/
-
-cp /boot/* /tftpboot/pxelinux/
-cp /opt/stack/images/kernel7.img /tftpboot/pxelinux/
+cp /opt/stack/images/armv7hl/* /tftpboot/pxelinux/
 
 <file name="/tftpboot/pxelinux/cmdline.txt">
 root=/dev/nfs nfsroot=&Kickstart_PrivateAddress;:/export/nfs/install rootwait ip=dhcp frontend=&Kickstart_PrivateAddress;
@@ -68,10 +69,34 @@ program_usb_boot_mode=1
 </post>
 
 <post>
+/usr/bin/systemctl enable nfs-server
 
-/opt/stack/bin/stack add appliance ace longname=ACE node=stacki-ace-backend
+/usr/sbin/exportfs -r
+
+/usr/bin/systemctl start nfs-server
+</post>
+
+<post>
+
+<!-- default ACE backend node -->
+
+/opt/stack/bin/stack add appliance ace longname=ACE
 /opt/stack/bin/stack set appliance attr ace attr=managed value=true
 /opt/stack/bin/stack set appliance attr ace attr=kickstartable value=yes
+/opt/stack/bin/stack set appliance attr ace attr=node value=stacki-ace-backend
+
+<!-- backend node used to build a generic CentOS image -->
+
+/opt/stack/bin/stack add appliance ace-centos longname=ACE-CentOS 
+/opt/stack/bin/stack set appliance attr ace-centos attr=managed value=true
+/opt/stack/bin/stack set appliance attr ace-centos attr=kickstartable value=yes
+/opt/stack/bin/stack set appliance attr ace-centos attr=node \
+	value=stacki-ace-centos
+
+/opt/stack/bin/stack add box ace-centos
+
+
+<!-- default boot disk is the micro SD card -->
 
 /opt/stack/bin/stack set attr attr=bootdisk value=mmcblk0
 

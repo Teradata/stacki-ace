@@ -105,5 +105,5 @@ for script in ksparser.handler.scripts:
 # reboot
 #
 cmd = '/usr/sbin/reboot'
-# subprocess.call(shlex.split(cmd))
+subprocess.call(shlex.split(cmd))
 

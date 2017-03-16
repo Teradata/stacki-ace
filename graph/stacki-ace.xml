@@ -6,6 +6,7 @@
 
 	<edge from="HEAD">
 		<to>stacki-ace-backend</to>
+		<to>stacki-ace-centos</to>
 	</edge>
 
 	<edge from="server">

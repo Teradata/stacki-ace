@@ -1,1 +1,1 @@
-NAME = ace-install
+NAME = stacki-ace-install

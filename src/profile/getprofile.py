@@ -8,7 +8,37 @@ import shutil
 ##
 ## main
 ##
-cmd = '/usr/bin/curl -o /run/ks.xml --local-port 1-66 --insecure https://10.1.31.1/install/sbin/profile.cgi?os=redhat&arch=armv7hl&np=4'
+
+#
+# parse out the IP address of the frontend
+#
+cmdline = open('/proc/cmdline', 'r')
+
+frontend = None
+for cmdarg in cmdline.readline().split():
+	if cmdarg.startswith('frontend='):
+		frontend = cmdarg.split('=')[1]
+
+cmdline.close()
+
+#
+# count the number of CPUs
+#
+np = 0
+
+cpuinfo = open('/proc/cpuinfo', 'r')
+
+for line in cpuinfo.readlines():
+	l = line.split(':')
+	if len(l) > 0 and l[0].strip() == 'processor':
+		np += 1
+
+cpuinfo.close()
+
+if np ==0:
+	np = 1
+
+cmd = '/usr/bin/curl -o /run/ks.xml --local-port 1-66 --insecure https://%s/install/sbin/profile.cgi?os=redhat&arch=armv7hl&np=%d' % (frontend, np)
 subprocess.call(shlex.split(cmd))
 
 f = open('/run/ks.xml', 'r')

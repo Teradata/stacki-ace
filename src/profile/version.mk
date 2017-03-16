@@ -1,1 +1,1 @@
-NAME = ace-profile
+NAME = stacki-ace-profile
