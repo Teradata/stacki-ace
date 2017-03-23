@@ -61,15 +61,21 @@ import stack.api
 #
 listpallet = stack.api.Call('list pallet')
 
+print """[main]
+cachedir=/run/mnt/sysimage/var/tmp
+keepcache=0
+assumeyes=1
+gpgcheck=0
+
+"""
+
 for o in listpallet:
 	boxes = o['boxes'].split()
 	if '&box;' in boxes:
 		print '[%s-%s-%s]' % (o['name'], o['version'], o['release'])
 		print 'name=%s %s %s' % (o['name'], o['version'], o['release'])
-		print 'baseurl=http://%s/install/pallets/%s/%s/%s/%s/%s' % \
+		print 'baseurl=http://%s/install/pallets/%s/%s/%s/%s/%s\n' % \
 			('&Kickstart_PrivateAddress;', o['name'], o['version'],				o['release'], o['os'], o['arch'])
-		print 'assumeyes=1'
-		print 'gpgcheck=0'
 
 for o in stack.api.Call('list cart'):
 	boxes = o['boxes'].split()
@@ -77,9 +83,7 @@ for o in stack.api.Call('list cart'):
 		print '&lt;stack:repo&gt; --name="%s" --baseurl=http://127.0.0.1/install/carts/%s&lt;/stack:repo&gt;' % (o['name'], o['name'])
 		print '[cart-%s]' % (o['name'])
 		print 'name=cart %s' % (o['name'])
-		print 'baseurl=http://%s/install/carts/%s' % (o['name'])
-		print 'assumeyes=1'
-		print 'gpgcheck=0'
+		print 'baseurl=http://%s/install/carts/%s\n' % (o['name'])
 </eval>
 </file>
 

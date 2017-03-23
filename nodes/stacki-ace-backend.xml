@@ -7,6 +7,10 @@
 </description>
 
 
+<pre>
+
+</pre>
+
 <post>
 
 if [ '&bootdisk;' == 'sda' ]

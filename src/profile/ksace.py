@@ -188,7 +188,7 @@ else:
 	#
 	# save the installation messages
 	#
-	shutil.copy('/run/ksace.debug', '/run/mnt/sysimage/root/ksace.debug')
+	shutil.copy('/run/ksace.debug', '/run/mnt/sysimage/var/log/ksace.debug')
 
 #
 # reboot
