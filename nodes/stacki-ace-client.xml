@@ -1,0 +1,156 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+<description>
+</description>
+
+
+<pre>
+
+if [ '&bootdisk;' == 'sda' ]
+then
+	BOOTPART=sda1
+	ROOTPART=sda2
+fi
+
+if [ '&bootdisk;' == 'mmcblk0' ]
+then
+	BOOTPART=mmcblk0p1
+	ROOTPART=mmcblk0p2
+fi
+
+<!-- nukedisk -->
+
+/usr/bin/dd if=/dev/zero of=/dev/&bootdisk; bs=512 count=1024
+/usr/sbin/parted -s /dev/&bootdisk; mklabel msdos
+
+
+<!-- partition -->
+
+/usr/sbin/parted -s /dev/&bootdisk; "mkpart primary fat32 0% 100M"
+/usr/sbin/parted -s /dev/&bootdisk; "mkpart primary ext4 100M 100%"
+
+
+<!-- format -->
+
+/usr/sbin/mkfs -t vfat /dev/$BOOTPART
+/usr/sbin/mkfs -t ext4 /dev/$ROOTPART
+
+
+<!-- mount -->
+
+mkdir -p /run/mnt/sysimage
+
+/usr/bin/mount /dev/$ROOTPART /run/mnt/sysimage
+
+(cd /run/mnt/sysimage ; mkdir boot ; /usr/bin/mount /dev/$BOOTPART boot)
+
+
+<!-- prep package install -->
+
+mkdir -p /run/mnt/sysimage/etc/yum.repos.d
+
+<file name="/run/mnt/sysimage/etc/yum.repos.d/stacki.repo">
+<eval shell="/opt/stack/bin/python">
+import stack.api
+
+#
+# output "url" line first -- the url line will be a path to 'stacki'
+#
+listpallet = stack.api.Call('list pallet')
+
+for o in listpallet:
+	boxes = o['boxes'].split()
+	if '&box;' in boxes:
+		print '[%s-%s-%s]' % (o['name'], o['version'], o['release'])
+		print 'name=%s %s %s' % (o['name'], o['version'], o['release'])
+		print 'baseurl=http://%s/install/pallets/%s/%s/%s/%s/%s' % \
+			('&Kickstart_PrivateAddress;', o['name'], o['version'],				o['release'], o['os'], o['arch'])
+		print 'assumeyes=1'
+		print 'gpgcheck=0'
+
+for o in stack.api.Call('list cart'):
+	boxes = o['boxes'].split()
+	if '&box;' in boxes:
+		print '&lt;stack:repo&gt; --name="%s" --baseurl=http://127.0.0.1/install/carts/%s&lt;/stack:repo&gt;' % (o['name'], o['name'])
+		print '[cart-%s]' % (o['name'])
+		print 'name=cart %s' % (o['name'])
+		print 'baseurl=http://%s/install/carts/%s' % (o['name'])
+		print 'assumeyes=1'
+		print 'gpgcheck=0'
+</eval>
+</file>
+
+</pre>
+
+
+<package>
+@core
+pykickstart
+raspberrypi2-kernel
+raspberrypi2-firmware
+raspberrypi2-kernel-firmware
+ntp
+ntpdate
+foundation-python
+foundation-python-xml
+stacki-ace-install
+stacki-ace-profile
+stack-command
+stack-pylib
+</package>
+
+
+<post>
+
+if [ '&bootdisk;' == 'sda' ]
+then
+	BOOTPART=sda1
+	ROOTPART=sda2
+fi
+
+if [ '&bootdisk;' == 'mmcblk0' ]
+then
+	BOOTPART=mmcblk0p1
+	ROOTPART=mmcblk0p2
+fi
+
+
+<file name="/boot/config.txt">
+program_usb_boot_mode=1
+</file>
+
+
+<!-- write fstab -->
+
+<file name="/etc/fstab" vars="expanded">
+/dev/$BOOTPART /boot vfat noatime 0 0
+/dev/$ROOTPART / ext4 noatime 0 0
+</file>
+
+
+<!-- disable selinux -->
+
+<file name="/etc/selinux/config">
+SELINUX=disabled
+</file>
+
+
+<!-- turn on our "fake" PXE solution -->
+
+cp /opt/stack/systemd/stacki-install.service /usr/lib/systemd/system/
+/usr/bin/systemctl enable stacki-install
+
+
+<!-- set the 'bootaction' back to 'os' -->
+
+/usr/bin/curl --insecure -o /dev/null \
+	https://&Kickstart_PrivateAddress;/install/sbin/public/setPxeboot.cgi?params='\{"action":"os"\}'
+
+</post>
+
+
+</kickstart> 
+

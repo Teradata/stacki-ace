@@ -4,13 +4,16 @@
 	<description>
 	</description>
 
-	<edge from="HEAD">
-		<to>stacki-ace-backend</to>
-		<to>stacki-ace-centos</to>
-	</edge>
-
 	<edge from="server">
 		<to>stacki-ace-server</to>
+	</edge>
+
+	<edge from="stacki-ace-centos">
+		<to>stacki-ace-client</to>
+	</edge>
+
+	<edge from="stacki-ace-backend">
+		<to>stacki-ace-client</to>
 	</edge>
 
 </graph>
