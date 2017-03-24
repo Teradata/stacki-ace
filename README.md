@@ -63,14 +63,51 @@ or:
   ```
   ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
   ```
+The above step will run several commands and will eventually display
+the Installation Wizard.
+
+## Installation Wizard
+
+### Timezone
+
+The first screen will appear and you will be prompted to enter your timezone:
 
 <img src="doc/screen-1.png" width="500">
 
+### Network
+
+The network configuration screen allows you to set up the network that will
+be used by the frontend to install backend hosts.
+
+1. _Fully Qualified Host Name_ - Input the FQDN for the frontend.
+2. Choose from the network _Devices_ to select the frontend's network interface.
+3. _IP_ address of the interface.
+4. _Netmask_.
+5. _Gateway_.
+5. _DNS Servers_ - More than one DNS Server can be entered as a comma-separated list (i.e., 8.8.8.8, 4.2.2.2, 8.8.4.4).
+
+Click _Continue_ to configure the network interface. 
+
 <img src="doc/screen-2.png" width="500">
+
+### Password
+
+Enter the password for the **root** account on the frontend.  
 
 <img src="doc/screen-3.png" width="500">
 
+### Add Pallets
+
+The `stacki` pallet that you provided as a parameter to `frontend-install.py`
+will be automatically selected.
+
+Just click _Continue_.
+
 <img src="doc/screen-4.png" width="500">
+
+### Review
+
+Review the installation parameters and click _Continue_ to proceed.
 
 <img src="doc/screen-5.png" width="500">
 
@@ -79,7 +116,12 @@ text.
 
 * Reboot the frontend Pi
 
+After `frontend-install.py` completes, reboot the frontend Pi to complete the
+installation.
+
 * Add/Enable the `os` pallet:
+
+After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
 
   ```
   stack add pallet os-7.3-7.x.armv7hl.disk1.iso
