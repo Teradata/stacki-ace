@@ -64,7 +64,18 @@ or:
   ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
   ```
 
-> This will take some time and will output a lot of text.
+![Screen 1](doc/screen-1.png)
+
+![Screen 2](doc/screen-2.png)
+
+![Screen 3](doc/screen-3.png)
+
+![Screen 4](doc/screen-4.png)
+
+![Screen 5](doc/screen-5.png)
+
+> The remainder of the install will take some time and will output a lot of
+text.
 
 * Reboot the frontend Pi
 
