@@ -66,7 +66,7 @@ or:
 
 ![Screen 1](doc/screen-1.png)
 
-![Screen 2](doc/screen-2.png)
+<img src="doc/screen-2.png" width="200">
 
 ![Screen 3](doc/screen-3.png)
 
