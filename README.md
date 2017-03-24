@@ -64,15 +64,15 @@ or:
   ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
   ```
 
-![Screen 1](doc/screen-1.png)
+<img src="doc/screen-1.png" width="500">
 
-<img src="doc/screen-2.png" width="200">
+<img src="doc/screen-2.png" width="500">
 
-![Screen 3](doc/screen-3.png)
+<img src="doc/screen-3.png" width="500">
 
-![Screen 4](doc/screen-4.png)
+<img src="doc/screen-4.png" width="500">
 
-![Screen 5](doc/screen-5.png)
+<img src="doc/screen-5.png" width="500">
 
 > The remainder of the install will take some time and will output a lot of
 text.
