@@ -84,7 +84,7 @@ be used by the frontend to install backend hosts.
 3. _IP_ address of the interface.
 4. _Netmask_.
 5. _Gateway_.
-5. _DNS Servers_ - More than one DNS Server can be entered as a comma-separated list (i.e., 8.8.8.8, 4.2.2.2, 8.8.4.4).
+5. _DNS Servers_ - Enter *one* DNS server here.
 
 Click _Continue_ to configure the network interface. 
 
@@ -135,13 +135,47 @@ After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
   stack enable pallet stacki-ace
   ```
 
+* Your pallet inventory should like this:
+
+  ```
+  # stack list pallet
+  NAME       VERSION      RELEASE ARCH    OS     BOXES
+  stacki     4.0_20170316 7.x     armv7hl redhat default
+  os         7.3          7.x     armv7hl redhat default
+  stacki-ace 4.0_20170324 7.x     armv7hl redhat default
+  ```
+
 * Apply the `stacki-ace` pallet to the frontend:
 
   ```
   stack run pallet stacki-ace | bash -x
   ```
+---
+
+# Build Backend(s)
+
+* Create a host configuration spreadsheet.
+
+The spreadsheet will contain the basic networking information for your
+backend Pis (known as `ace` appliances).
+
+The Host CSV file needs to have the following columns:
+
+1. **Name**. A hostname.
+1. **Appliance**. The appliance name for the host (e.g. backend).
+1. **Rack**. The rack number for the host.
+1. **Rank**. The position in the rack for the host.
+1. **IP**. Network address.
+1. **MAC**. Ethernet address.
+1. **Interface**. Ethernet device name (e.g. em1).
+1. **Network**. Network name for the interface (e.g. private).
+
+Here is a link to a 
+[sample spreadsheet](https://docs.google.com/spreadsheets/d/1YC4tlmiMw2YUj3X-2Q47VnAwuyxg2d5zL6mmbBuA29k/edit?usp=sharing).
 
 * Load host configuration spreadsheet.
+
+Login to the frontend Pi
 
   ```
   stack load hostfile file=hosts.csv
@@ -156,8 +190,8 @@ After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
   rasp004 0    4    1    ace       default ----------- os        install
   ```
 
-In the above output `rasp003` is the frontend host and `rasp004` is the
-backend host.
+In the above output `rasp003` is the frontend Pi and `rasp004` is the
+backend Pi.
 The appliace type for `rasp004` is **ace** which is correct appliance type
 for a Raspberry Pi backend host.
 
@@ -166,10 +200,6 @@ for a Raspberry Pi backend host.
   ```
   stack set host boot ace action=install
   ```
-
----
-
-# Build Backend(s)
 
 * Copy `stacki-centos.img` to a MicroSD card.
 
