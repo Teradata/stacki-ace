@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "STACKI - retrieving profile"
+
 #
 # get the kickstart file
 #

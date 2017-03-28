@@ -98,6 +98,7 @@ pykickstart
 raspberrypi2-kernel
 raspberrypi2-firmware
 raspberrypi2-kernel-firmware
+foundation-parted
 foundation-python
 foundation-python-xml
 stacki-ace-install

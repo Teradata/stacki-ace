@@ -10,14 +10,8 @@ import os
 import shutil
 import sys
 
-if not os.path.exists('/run/ks.cfg'):
-	sys.exit(0)
 
-ksparser = KickstartParser(makeVersion())
-ksparser.readKickstart("/run/ks.cfg")
-
-
-def findBootDisk():
+def findBootPart():
 	p = subprocess.Popen([ '/usr/bin/lsblk', '-nlo', 'NAME,MOUNTPOINT' ],
 		stdin=subprocess.PIPE, stdout=subprocess.PIPE,
 		stderr=subprocess.PIPE)
@@ -83,9 +77,64 @@ def doScript(section, script, scriptnum):
 	else:
 		os.wait()
 
+
+def resizeBoot(bootdisk):
+	if not bootdisk:
+		return
+
+	if not os.path.exists('/.resizepart'):
+		import time
+
+		print 'STACKI - resizing root partition'	
+
+		cmd = '/opt/stack/sbin/parted --script /dev/%s ' % bootdisk
+		cmd += 'resizepart 2 100%'
+		subprocess.call(shlex.split(cmd))
+
+		f = open('/.resizepart', 'w')
+		f.write('done\n')
+		f.close()
+
+		print 'STACKI - rebooting'
+		time.sleep(5)
+
+		#
+		# since you can't resize the root file system after you
+		# resize the partition (because the kernel needs to freshly
+		# read the partition table -- and 'partprobe' didn't do
+		# the trick), let's reboot.
+		#
+		cmd = '/usr/sbin/reboot'
+		subprocess.call(shlex.split(cmd))
+
+	elif not os.path.exists('/.resizefs'):
+		print 'STACKI - resizing root filesystem'
+
+		if bootdisk == 'mmcblk0':
+			rootpart = '%sp2' % bootdisk
+		else:
+			rootpart = '%s2' % bootdisk
+
+		cmd = '/usr/sbin/resize2fs /dev/%s' % rootpart
+		subprocess.call(shlex.split(cmd))
+
+		f = open('/.resizefs', 'w')
+		f.write('done\n')
+		f.close()
+
+	return
+
 ##
 ## MAIN
 ##
+
+if not os.path.exists('/run/ks.cfg'):
+	ksparser = None
+else:
+	ksparser = KickstartParser(makeVersion())
+	ksparser.readKickstart("/run/ks.cfg")
+
+bootpart = findBootPart()
 
 #
 # first determine if we should execute this script
@@ -97,16 +146,19 @@ try:
 
 	action = ace_config.attributes['bootaction']
 	appliance = ace_config.attributes['appliance']
+	bootdisk = ace_config.attributes['bootdisk']
 except:
 	action = None
 	appliance = None
+	bootdisk = None
 
-if 0:
-	if not appliance:
-		#
-		# do nothing because this is not an ACE backend node
-		#
-		sys.exit(0)
+if not appliance or appliance == 'ace-centos':
+	#
+	# determine if we need to resize the boot media. only resize if
+	# our '/' is *not* nfs (which means we are in install mode).
+	#
+	if bootpart != 'nfs':
+		resizeBoot(bootdisk)
 
 if action != 'install':
 	print 'ksace.py: bootaction "%s" != "install"' % action
@@ -120,9 +172,7 @@ if action != 'install':
 # will be an nfs mount.
 #
 
-bootdisk = findBootDisk()
-
-if bootdisk != 'nfs':
+if bootpart != 'nfs':
 	#
 	# we didn't boot off the network, then remove /boot/bootcode.bin
 	# and reboot.
@@ -193,6 +243,8 @@ else:
 #
 # reboot
 #
+print 'STACKI - rebooting'
+
 cmd = '/usr/sbin/reboot'
 subprocess.call(shlex.split(cmd))
 
