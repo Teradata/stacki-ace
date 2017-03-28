@@ -6,15 +6,19 @@ Requirements
 
 # Frontend
 
-* 16 GB of storage
+* [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+
+* MicroSD card with at least 2 GB of storage
 
 # Backend
 
-* 2 GB of storage
+* [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+
+* MicroSD card with at least 2 GB of storage
 
 ---
 
-# Build Frontend
+# Build Your Frontend
 
 * On your Linux workstation, download `stacki-centos.img` and copy it onto
 the MicroSD card that you will use to build your frontend Pi.
