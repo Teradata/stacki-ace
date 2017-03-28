@@ -16,52 +16,64 @@ Requirements
 
 # Build Frontend
 
-* Boot Raspberry Pi that will be the frontend with `stacki-centos.img`.
+* On your Linux workstation, download `stacki-centos.img` and copy it onto
+the MicroSD card that you will use to build your frontend Pi.
 
-* Login as `root` with the password `stacki-centos`.
-** You'll be asked to change your password.
+Most likely, you'll need to put your MicroSD card into an adapter in order
+to insert it into your workstation.
 
-* Increase storage to full capacity:
+After you insert your MicroSD card into your workstation, you should see
+messages like this from `dmesg`:
 
    ```
-   look up command to do this
+[20630376.657782] sd 49:0:0:0: [sdd] 124735488 512-byte logical blocks: (63.8 GB/59.4 GiB)
+[20630376.658370] sd 49:0:0:0: [sdd] Write Protect is off
+[20630376.658374] sd 49:0:0:0: [sdd] Mode Sense: 03 00 00 00
+[20630376.659016] sd 49:0:0:0: [sdd] No Caching mode page found
+[20630376.660577] sd 49:0:0:0: [sdd] Assuming drive cache: write through
+[20630376.665869]  sdd: sdd1 sdd2
+[20630376.668636] sd 49:0:0:0: [sdd] Attached SCSI removable disk
    ```
 
-* Reboot.
+The above indicates that *sdd* is the device name of the MicroSD card.
+The device name on your system most likely will be different, but it will have
+the format *sdX*.
 
-* Set the time:
-
-  ```
-  timedatectl set-timezone America/Los_Angeles
-  timedatectl set-time '2017-03-14 14:53:00'
-  ```
-
-or:
+Now let's copy *stacki-centos.img* to the MicroSD card.
 
   ```
-  timedatectl set-timezone America/Los_Angeles
-  ntpdate -s pool.ntp.org
+  wget stacki-centos.img
+
+  dd if=stacki-centos.img of=/dev/sdd
   ```
+
+* Put the MicroSD card into the Raspberry Pi that will be the frontend and
+power the frontend Pi on.
+
+> The frontend Pi will reboot on the first boot, don't be alarmed.
+The Pi is automatically resizing your '/' file system to take advantage of
+all the free space on your MicroSD card.
+
+* After the Pi boots, login as `root` with the password `stacki-centos`.
+
+> You'll be asked to change your password.
 
 * Copy ISOs to the frontend:
 
   ```
-  wget os-7.3-7.x.armv7hl.disk1.iso
-  wget stacki-4.0_20170316-7.x.armv7hl.disk1.iso
-  wget stacki-ace-4.0_20170323-7.x.armv7hl.disk1.iso
+  os-7.3-7.x.armv7hl.disk1.iso
+  stacki-4.0_20170316-7.x.armv7hl.disk1.iso
+  stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
   ```
 
-* Apply the ``stacki`` ISO to the frontend.
-** This will transform the Pi into a Stacki ACE frontend.
+* Download and execute `frontend-install.py`.
+
+> This will transform the Pi into a Stacki ACE frontend.
 
   ```
-  wget frontend-install.py
-  ```
+  # wget frontend-install.py
 
-* Execute `frontend-install.py`:
-
-  ```
-  ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
+  # ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
   ```
 The above step will run several commands and will eventually display
 the Installation Wizard.
@@ -142,7 +154,7 @@ After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
   NAME       VERSION      RELEASE ARCH    OS     BOXES
   stacki     4.0_20170316 7.x     armv7hl redhat default
   os         7.3          7.x     armv7hl redhat default
-  stacki-ace 4.0_20170324 7.x     armv7hl redhat default
+  stacki-ace 4.0_20170328 7.x     armv7hl redhat default
   ```
 
 * Apply the `stacki-ace` pallet to the frontend:
@@ -150,6 +162,9 @@ After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
   ```
   stack run pallet stacki-ace | bash -x
   ```
+
+> Your frontend Pi is now ready to build backend Pis.
+
 ---
 
 # Build Backend(s)
