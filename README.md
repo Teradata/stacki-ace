@@ -52,7 +52,7 @@ Now let's copy *stacki-centos.img* to the MicroSD card.
   ```
 
 * Put the MicroSD card into the Raspberry Pi that will be the frontend and
-power the frontend Pi on.
+power on the frontend Pi.
 
 > The frontend Pi will reboot on the first boot, don't be alarmed.
 The Pi is automatically resizing your '/' file system to take advantage of
@@ -62,7 +62,7 @@ all the free space on your MicroSD card.
 
 > You'll be asked to change your password.
 
-* Copy ISOs to the frontend:
+* Copy the Stacki ACE ISOs to the frontend:
 
   ```
   os-7.3-7.x.armv7hl.disk1.iso
@@ -130,24 +130,20 @@ Review the installation parameters and click _Continue_ to proceed.
 > The remainder of the install will take some time and will output a lot of
 text.
 
-* Reboot the frontend Pi
-
-After `frontend-install.py` completes, reboot the frontend Pi to complete the
+* After `frontend-install.py` completes, reboot the frontend Pi to complete the
 installation.
 
-* Add/Enable the `os` pallet:
-
-After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
+* After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
 
   ```
   stack add pallet os-7.3-7.x.armv7hl.disk1.iso
   stack enable pallet os
   ```
 
-* Add/Enable the `stacki-ace` pallet:
+* Now add/enable the `stacki-ace` pallet:
 
   ```
-  stack add pallet stacki-ace-4.0_20170321-7.x.armv7hl.disk1.iso
+  stack add pallet stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
   stack enable pallet stacki-ace
   ```
 
@@ -194,15 +190,15 @@ Here is a link to a
 
 * Save the spreadsheet as a CSV file (comma-separated values).
 
-* Load host configuration spreadsheet.
+* Load the host configuration spreadsheet into your frontend Pi.
 
-Copy the host csv file to your frontend Pi and execute:
+Copy the host CSV file to your frontend Pi and execute:
 
   ```
   stack load hostfile file=hosts.csv
   ```
 
-** To see the host information, execute:
+* To see the host information, execute:
 
   ```
   # stack list host
@@ -213,18 +209,32 @@ Copy the host csv file to your frontend Pi and execute:
 
 In the above output `rasp003` is the frontend Pi and `rasp004` is the
 backend Pi.
-The appliace type for `rasp004` is **ace** which is correct appliance type
+The appliace type for `rasp004` is **ace** which is th correct appliance type
 for a Raspberry Pi backend host.
 
 * Set all the `ace` backend nodes to install:
 
   ```
-  stack set host boot ace action=install
+  # stack set host boot ace action=install
   ```
 
-* Copy `stacki-centos.img` to a MicroSD card.
+* Copy `stacki-centos.img` to the MicroSD card that will be used in the
+backend Pi (use the same procedure you used to copy `stacki-centos.img` to
+your frontend Pi's MicroSD card).
 
-* Boot the backend Pi
+* Put the MicroSD card into your backend Pi and power it on.
+
+* The frontend Pi will recognize the backend Pi and the frontend will instruct
+the backend to install itself.
+
+> This process will take approximately 10 minutes.
+When complete, you'll be able to login to the backend via the console or via
+*ssh* from the frontend.
+
+* If you have multiple backend Pis, repeat the process of copying
+`stacki-centos.img` to the respective backend Pis' MicroSD cards and booting
+them -- the frontend Pi will install all backend Pis that are listed in
+`stack list host`.
 
 * Enjoy your $35 dollar / node cluster!!
 
