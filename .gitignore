@@ -1,0 +1,6 @@
+*/build-*-*/
+*/src/order-*.mk
+.buildenv-*
+.rpmmacros
+*.pyc
+roll-*.xml

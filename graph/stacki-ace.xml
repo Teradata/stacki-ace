@@ -16,5 +16,9 @@
 		<to>stacki-ace-client</to>
 	</edge>
 
+	<edge from="stacki-ace-client">
+		<to>stacki-ace-time</to>
+	</edge>
+
 </graph>
 

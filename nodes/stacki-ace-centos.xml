@@ -9,6 +9,11 @@ This defines a generic CentOS machine that will be used as the base image
 </description>
 
 
+<package>
+foundation-parted
+</package>
+
+
 <post>
 
 if [ '&bootdisk;' == 'sda' ]
@@ -66,6 +71,13 @@ MTU=1500
 echo "stacki-centos" | passwd root --stdin
 
 
+<!--
+	when 'root' logs in for the first time, make sure they
+	change their password
+-->
+/usr/bin/chage -d 0 root
+
+
 <!-- put in a default name server -->
 
 <file name="/etc/resolv.conf">
@@ -73,15 +85,43 @@ nameserver 8.8.8.8
 </file>
 
 
-<!-- time configuration -->
+<!-- resize the root partition on first boot -->
 
-timedatectl set-ntp true
+<file name="/usr/lib/systemd/system/stacki-resizeroot.service">
+[Unit]
+Description=stacki-resizeroot
+After=network.target
+Before=systemd-user-sessions.service
 
-<file name="/etc/systemd/timesyncd.conf">
-[Time]
-NTP=ntp.pool.org
+[Service]
+Type=oneshot
+ExecStart=/tmp/resizeroot.sh
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
 </file>
 
+/usr/bin/systemctl enable stacki-resizeroot
+
+echo "#!/bin/sh
+
+if [ ! -f /tmp/resizepart ] ; then
+	echo "STACKI - resizing root partition" > /dev/tty1
+	/opt/stack/sbin/parted --script /dev/&bootdisk; resizepart 2 100%
+	touch /tmp/resizepart 
+	echo "STACKI - rebooting" > /dev/tty1
+	sleep 5
+	reboot
+else
+	echo "STACKI - resizing root filesystem" > /dev/tty1
+	/usr/sbin/resize2fs /dev/$ROOTPART
+	systemctl disable stacki-resizeroot
+	touch /tmp/resizefs
+fi
+" > /tmp/resizeroot.sh
+
+chmod 700 /tmp/resizeroot.sh
 
 </post>
 

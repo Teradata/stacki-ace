@@ -7,9 +7,9 @@
 </description>
 
 
-<pre>
-
-</pre>
+<package>
+ntp
+</package>
 
 <post>
 
@@ -46,13 +46,19 @@ rm -f /etc/yum.repos.d/CentOS*.repo
 
 <!-- time config -->
 
-timedatectl set-timezone &Kickstart_Timezone;
-timedatectl set-ntp true
+rm -f /etc/localtime
+ln -s /usr/share/zoneinfo/&Kickstart_Timezone; /etc/localtime
 
-<file name="/etc/systemd/timesyncd.conf">
-[Time]
-NTP=&Kickstart_PrivateNTPHost;
+<file name="/opt/stack/bin/stacki-time.sh" perms="700">
+#!/bin/sh
+/usr/sbin/ntpdate -s &Kickstart_PrivateNTPHost;
 </file>
+
+
+<!-- yum config -->
+
+<report name="host.yum">&hostname;</report>
+
 
 </post>
 

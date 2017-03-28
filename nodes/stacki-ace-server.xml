@@ -13,18 +13,48 @@
 <package>stacki-ace-command</package>
 
 <package>nfs-utils</package>
+<package>ntp</package>
 
 
 <post>
 
+<!-- time configuration -->
+
+<file name="/etc/sysconfig/ntpd">
+OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"
+</file>
+
+<file name="/etc/ntp.conf">
+server pool.ntp.org iburst
+server 127.127.1.1 iburst
+fudge 127.127.1.1 stratum 10
+driftfile /var/lib/ntp/drift
+</file>
+
+/usr/sbin/ntpdate pool.ntp.org
+
+/usr/bin/systemctl enable ntpd
+/usr/bin/systemctl start ntpd
+
+<file name="/opt/stack/bin/stacki-time.sh" perms="700">
+#!/bin/sh
+/usr/sbin/ntpdate -s pool.ntp.org
+</file>
+
+
 <!-- configure the NFS server to accept v2 requests -->
 
-gawk '/RPCNFSDARGS/ { \
-	printf("RPCNFSDARGS=\"-V 2\"\n"); \
-	next; \
-} \
-{ print $0 }' /etc/sysconfig/nfs &gt; /tmp/nfs
-mv /tmp/nfs /etc/sysconfig/nfs
+<file name="/etc/sysconfig/nfs">
+RPCNFSDARGS="-V 2"
+RPCMOUNTDOPTS=""
+STATDARG=""
+SMNOTIFYARGS=""
+RPCIDMAPDARGS=""
+RPCGSSDARGS=""
+GSS_USE_PROXY="yes"
+RPCSVCGSSDARGS=""
+BLKMAPDARGS=""
+</file>
 
 mkdir -p /export/nfs/install
 
@@ -53,6 +83,7 @@ chmod a+x /export/nfs/install/tmp/systemctl.stacki
 
 chroot /export/nfs/install /tmp/systemctl.stacki
 </post>
+
 
 <post>
 mkdir -p /tftpboot/pxelinux/

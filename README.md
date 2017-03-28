@@ -173,9 +173,11 @@ The Host CSV file needs to have the following columns:
 Here is a link to a 
 [sample spreadsheet](https://docs.google.com/spreadsheets/d/1YC4tlmiMw2YUj3X-2Q47VnAwuyxg2d5zL6mmbBuA29k/edit?usp=sharing).
 
+* Save the spreadsheet as a CSV file (comma-separated values).
+
 * Load host configuration spreadsheet.
 
-Login to the frontend Pi
+Copy the host csv file to your frontend Pi and execute:
 
   ```
   stack load hostfile file=hosts.csv

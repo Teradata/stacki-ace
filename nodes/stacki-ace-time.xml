@@ -1,0 +1,34 @@
+<?xml version="1.0" standalone="no"?>
+
+<kickstart>
+
+
+<description>
+</description>
+
+
+<post>
+
+<file name="/usr/lib/systemd/system/stacki-time.service">
+[Unit]
+Description=stacki-time
+After=multi-user.target
+Requires=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/stack/bin/stacki-time.sh
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+</file>
+
+/usr/bin/systemctl enable stacki-time
+
+
+</post>
+
+
+</kickstart> 
+

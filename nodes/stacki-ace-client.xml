@@ -64,8 +64,6 @@ listpallet = stack.api.Call('list pallet')
 print """[main]
 cachedir=/run/mnt/sysimage/var/tmp
 keepcache=0
-assumeyes=1
-gpgcheck=0
 
 """
 
@@ -74,8 +72,10 @@ for o in listpallet:
 	if '&box;' in boxes:
 		print '[%s-%s-%s]' % (o['name'], o['version'], o['release'])
 		print 'name=%s %s %s' % (o['name'], o['version'], o['release'])
-		print 'baseurl=http://%s/install/pallets/%s/%s/%s/%s/%s\n' % \
+		print 'baseurl=http://%s/install/pallets/%s/%s/%s/%s/%s' % \
 			('&Kickstart_PrivateAddress;', o['name'], o['version'],				o['release'], o['os'], o['arch'])
+		print 'assumeyes=1'
+		print 'gpgcheck=0\n'
 
 for o in stack.api.Call('list cart'):
 	boxes = o['boxes'].split()
@@ -83,7 +83,9 @@ for o in stack.api.Call('list cart'):
 		print '&lt;stack:repo&gt; --name="%s" --baseurl=http://127.0.0.1/install/carts/%s&lt;/stack:repo&gt;' % (o['name'], o['name'])
 		print '[cart-%s]' % (o['name'])
 		print 'name=cart %s' % (o['name'])
-		print 'baseurl=http://%s/install/carts/%s\n' % (o['name'])
+		print 'baseurl=http://%s/install/carts/%s' % (o['name'])
+		print 'assumeyes=1'
+		print 'gpgcheck=0\n'
 </eval>
 </file>
 
@@ -96,8 +98,6 @@ pykickstart
 raspberrypi2-kernel
 raspberrypi2-firmware
 raspberrypi2-kernel-firmware
-ntp
-ntpdate
 foundation-python
 foundation-python-xml
 stacki-ace-install
@@ -152,6 +152,7 @@ cp /opt/stack/systemd/stacki-install.service /usr/lib/systemd/system/
 
 /usr/bin/curl --insecure -o /dev/null \
 	https://&Kickstart_PrivateAddress;/install/sbin/public/setPxeboot.cgi?params='\{"action":"os"\}'
+
 
 </post>
 
