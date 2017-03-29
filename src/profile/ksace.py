@@ -11,16 +11,21 @@ import shutil
 import sys
 
 
-def findBootPart():
-	p = subprocess.Popen([ '/usr/bin/lsblk', '-nlo', 'NAME,MOUNTPOINT' ],
+def findBootDisk():
+	p = subprocess.Popen([ '/usr/bin/lsblk', '-nlo',
+		'NAME,TYPE,MOUNTPOINT' ],
 		stdin=subprocess.PIPE, stdout=subprocess.PIPE,
 		stderr=subprocess.PIPE)
 	o = p.communicate()[0]
 
+	bootdisk = None
+
 	for line in o.split('\n'):
 		l = line.split()
-		if len(l) == 2 and l[1] == '/boot':
-			return l[0]
+		if len(l) == 2 and l[1] == 'disk':
+			bootdisk = l[0]
+		elif len(l) == 3 and l[2] == '/boot':
+			return (bootdisk, l[0])
 
 	p = subprocess.Popen([ '/usr/bin/cat', '/proc/mounts' ],
 		stdin=subprocess.PIPE, stdout=subprocess.PIPE,
@@ -30,7 +35,7 @@ def findBootPart():
 	for line in o.split('\n'):
 		l = line.split()
 		if len(l) > 2 and l[1] == '/' and l[2] == 'nfs':
-			return 'nfs'
+			return ('nfs', 'nfs')
 
 	return None
 
@@ -134,7 +139,7 @@ else:
 	ksparser = KickstartParser(makeVersion())
 	ksparser.readKickstart("/run/ks.cfg")
 
-bootpart = findBootPart()
+bootdisk, bootpart = findBootDisk()
 
 #
 # first determine if we should execute this script
@@ -146,11 +151,9 @@ try:
 
 	action = ace_config.attributes['bootaction']
 	appliance = ace_config.attributes['appliance']
-	bootdisk = ace_config.attributes['bootdisk']
 except:
 	action = None
 	appliance = None
-	bootdisk = None
 
 if not appliance or appliance == 'ace-centos':
 	#
