@@ -163,7 +163,9 @@ installation.
   stack run pallet stacki-ace | bash -x
   ```
 
-> Your frontend Pi is now ready to build backend Pis.
+* Reboot your frontend Pi 
+
+* After the frontend reboots, your frontend Pi is ready to build backend Pis.
 
 ---
 
@@ -212,7 +214,7 @@ backend Pi.
 The appliace type for `rasp004` is **ace** which is th correct appliance type
 for a Raspberry Pi backend host.
 
-* Set all the `ace` backend nodes to install:
+* Set all the `ace` backend hosts to install:
 
   ```
   # stack set host boot ace action=install
@@ -236,5 +238,5 @@ When complete, you'll be able to login to the backend via the console or via
 them -- the frontend Pi will install all backend Pis that are listed in
 `stack list host`.
 
-* Enjoy your $35 dollar / node cluster!!
+* Enjoy your $35 dollar / host cluster!!
 
