@@ -2,6 +2,31 @@ The best ARM on the team is an Ace.
 
 ---
 
+# Introduction
+
+An [overview](https://github.com/StackIQ/stacki/wiki]) of Stacki and the
+key [concepts](https://github.com/StackIQ/stacki/wiki/Concepts) can be found
+at their respective links.
+
+In short, there are two **appliace** types in Stacki: a **frontend** and
+**backend** hosts.
+The relationship between the frontend and backend hosts is described in the
+picture below:
+
+<img src="doc/stacki-architecture.png" width="500">
+
+There is one frontend.
+The frontend is responsible for installing and configuring backend hosts.
+There are several repositories on the frontend (we call them _pallets_) and
+these pallets are used as the universe of RPMs available to the backend hosts
+during their installation.
+A more in-depth explanation can be found in the Stacki documentation in the
+[Concepts](https://github.com/StackIQ/stacki/wiki/Concepts) section.
+
+So, the first order of business, is to install your frontend Pi ...
+
+---
+
 Requirements
 
 # Frontend
@@ -10,7 +35,7 @@ Requirements
 
 * MicroSD card with at least 8 GB of storage
 
-# Backend
+# Backend(s)
 
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
 
@@ -69,7 +94,7 @@ all the free space on your MicroSD card.
 
   # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-4.0_20170316-7.x.armv7hl.disk1.iso
 
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-ace-4.0_20170329-7.x.armv7hl.disk1.iso
   ```
 
 * Download and execute `frontend-install.py`.
@@ -145,7 +170,7 @@ installation.
 * Now add/enable the `stacki-ace` pallet:
 
   ```
-  # stack add pallet stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
+  # stack add pallet stacki-ace-4.0_20170329-7.x.armv7hl.disk1.iso
   # stack enable pallet stacki-ace
   ```
 
@@ -156,7 +181,7 @@ installation.
   NAME       VERSION      RELEASE ARCH    OS     BOXES
   stacki     4.0_20170316 7.x     armv7hl redhat default
   os         7.3          7.x     armv7hl redhat default
-  stacki-ace 4.0_20170328 7.x     armv7hl redhat default
+  stacki-ace 4.0_20170329 7.x     armv7hl redhat default
   ```
 
 * Apply the `stacki-ace` pallet to the frontend:
