@@ -8,7 +8,7 @@ Requirements
 
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
 
-* MicroSD card with at least 2 GB of storage
+* MicroSD card with at least 8 GB of storage
 
 # Backend
 
