@@ -46,9 +46,9 @@ the format *sdX*.
 Now let's copy *stacki-centos.img* to the MicroSD card.
 
   ```
-  wget stacki-centos.img
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-centos.img
 
-  dd if=stacki-centos.img of=/dev/sdd
+  # dd if=stacki-centos.img of=/dev/sdd
   ```
 
 * Put the MicroSD card into the Raspberry Pi that will be the frontend and
@@ -65,9 +65,11 @@ all the free space on your MicroSD card.
 * Copy the Stacki ACE ISOs to the frontend:
 
   ```
-  os-7.3-7.x.armv7hl.disk1.iso
-  stacki-4.0_20170316-7.x.armv7hl.disk1.iso
-  stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/os-7.3-7.x.armv7hl.disk1.iso
+
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-4.0_20170316-7.x.armv7hl.disk1.iso
+
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
   ```
 
 * Download and execute `frontend-install.py`.
@@ -75,7 +77,7 @@ all the free space on your MicroSD card.
 > This will transform the Pi into a Stacki ACE frontend.
 
   ```
-  # wget frontend-install.py
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/frontend-install.py
 
   # ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
   ```
@@ -136,15 +138,15 @@ installation.
 * After the frontend Pi reboots, login as `root` and add/enable the `os` pallet:
 
   ```
-  stack add pallet os-7.3-7.x.armv7hl.disk1.iso
-  stack enable pallet os
+  # stack add pallet os-7.3-7.x.armv7hl.disk1.iso
+  # stack enable pallet os
   ```
 
 * Now add/enable the `stacki-ace` pallet:
 
   ```
-  stack add pallet stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
-  stack enable pallet stacki-ace
+  # stack add pallet stacki-ace-4.0_20170328-7.x.armv7hl.disk1.iso
+  # stack enable pallet stacki-ace
   ```
 
 * Your pallet inventory should like this:
@@ -160,7 +162,7 @@ installation.
 * Apply the `stacki-ace` pallet to the frontend:
 
   ```
-  stack run pallet stacki-ace | bash -x
+  # stack run pallet stacki-ace | bash -x
   ```
 
 * Reboot your frontend Pi 
@@ -197,7 +199,7 @@ Here is a link to a
 Copy the host CSV file to your frontend Pi and execute:
 
   ```
-  stack load hostfile file=hosts.csv
+  # stack load hostfile file=hosts.csv
   ```
 
 * To see the host information, execute:
