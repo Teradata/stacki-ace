@@ -8,8 +8,8 @@ An [overview](https://github.com/StackIQ/stacki/wiki]) of Stacki and the
 key [concepts](https://github.com/StackIQ/stacki/wiki/Concepts) can be found
 at their respective links.
 
-In short, there are two **appliace** types in Stacki: a **frontend** and
-**backend** hosts.
+In short, there are two **appliance** types in Stacki: **frontend** and
+**backend**.
 The relationship between the frontend and backend hosts is described in the
 picture below:
 
@@ -27,15 +27,15 @@ So, the first order of business, is to install your frontend Pi ...
 
 ---
 
-Requirements
+# Requirements
 
-# Frontend
+## Frontend
 
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
 
 * MicroSD card with at least 8 GB of storage
 
-# Backend(s)
+## Backend(s)
 
 * [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
 
