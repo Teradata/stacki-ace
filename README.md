@@ -250,3 +250,12 @@ This guide only contains documentation that is specific to Stacki Ace.
 The complete documentation for Stacki can be found
 [here](https://github.com/StackIQ/stacki/wiki).
 
+# The Source Code
+
+The source code can be found at [GitHub](https://github.com/StackIQ/stacki-ace).
+
+# Contact Us
+
+Join our Google Group and/or our Slack channel
+[here](https://www.stackiq.com/support/).
+
