@@ -242,3 +242,11 @@ them -- the frontend Pi will install all backend Pis that are listed in
 
 * Enjoy your $35 dollar / host cluster!!
 
+---
+
+# Full Stacki Documentation
+
+This guide only contains documentation that is specific to Stacki Ace.
+The complete documentation for Stacki can be found
+[here](https://github.com/StackIQ/stacki/wiki).
+
