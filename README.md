@@ -1,4 +1,4 @@
-The best ARM on the team is an ACE.
+The best ARM on the team is an Ace.
 
 ---
 
@@ -62,7 +62,7 @@ all the free space on your MicroSD card.
 
 > You'll be asked to change your password.
 
-* Copy the Stacki ACE ISOs to the frontend:
+* Copy the Stacki Ace ISOs to the frontend:
 
   ```
   # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/os-7.3-7.x.armv7hl.disk1.iso
@@ -74,7 +74,7 @@ all the free space on your MicroSD card.
 
 * Download and execute `frontend-install.py`.
 
-> This will transform the Pi into a Stacki ACE frontend.
+> This will transform the Pi into a Stacki Ace frontend.
 
   ```
   # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/frontend-install.py
