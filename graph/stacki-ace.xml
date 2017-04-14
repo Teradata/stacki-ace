@@ -6,6 +6,7 @@
 
 	<edge from="server">
 		<to>stacki-ace-server</to>
+		<to>stacki-ace-time</to>
 	</edge>
 
 	<edge from="stacki-ace-centos">

@@ -187,7 +187,8 @@ if bootpart != 'nfs':
 	# https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/bootflow.md
 	#
 
-	os.remove('/boot/bootcode.bin')
+	if os.path.exists('/boot/bootcode.bin'):
+		os.remove('/boot/bootcode.bin')
 	
 else:
 	#
