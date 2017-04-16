@@ -83,7 +83,7 @@ for o in stack.api.Call('list cart'):
 		print '&lt;stack:repo&gt; --name="%s" --baseurl=http://127.0.0.1/install/carts/%s&lt;/stack:repo&gt;' % (o['name'], o['name'])
 		print '[cart-%s]' % (o['name'])
 		print 'name=cart %s' % (o['name'])
-		print 'baseurl=http://%s/install/carts/%s' % (o['name'])
+		print 'baseurl=http://&Kickstart_PrivateAddress;/install/carts/%s' % (o['name'])
 		print 'assumeyes=1'
 		print 'gpgcheck=0\n'
 </eval>
