@@ -1,5 +1,5 @@
-*/build-*-*/
-*/src/order-*.mk
+build-*-*/
+src/order-*.mk
 .buildenv-*
 .rpmmacros
 *.pyc
