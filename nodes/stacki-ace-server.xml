@@ -16,6 +16,8 @@
 <package>dosfstools</package>
 <package>ntp</package>
 
+<package>lighttpd</package>
+
 
 <post>
 
@@ -77,6 +79,11 @@ ONBOOT=yes
 MTU=1500
 </file>
 
+<file name="/export/nfs/install/tmp/stack.conf">
+var.trackers = "&Kickstart_PrivateAddress;"
+var.pkgservers = "&Kickstart_PrivateAddress;"
+</file>
+
 cp /opt/stack/systemd/stacki-install.service /export/nfs/install/usr/lib/systemd/system/
 
 echo "/usr/bin/systemctl enable stacki-install" > /export/nfs/install/tmp/systemctl.stacki
@@ -132,6 +139,13 @@ program_usb_boot_mode=1
 
 /opt/stack/bin/stack set attr attr=bootdisk value=mmcblk0
 
+<!-- symbolic link to installation folder -->
+mkdir -p /run/mnt/sysimage/install
+ln -s /run/mnt/sysimage/install /export/nfs/install/install
+rmdir /run/mnt/sysimage/install
+
+sed -i 's/tmp/run/' /export/nfs/install/opt/lighttpd/conf/lighttpd.conf
+sed -i 's/&Kickstart_PrivateAddress;/127.0.0.1/' /export/nfs/install/etc/yum.repos.d/stacki.repo
 </post>
 
 

@@ -51,6 +51,7 @@ mkdir -p /run/mnt/sysimage
 <!-- prep package install -->
 
 mkdir -p /run/mnt/sysimage/etc/yum.repos.d
+mkdir -p /run/mnt/sysimage/install
 
 <file name="/run/mnt/sysimage/etc/yum.repos.d/stacki.repo">
 <eval shell="/opt/stack/bin/python">
@@ -73,7 +74,7 @@ for o in listpallet:
 		print '[%s-%s-%s]' % (o['name'], o['version'], o['release'])
 		print 'name=%s %s %s' % (o['name'], o['version'], o['release'])
 		print 'baseurl=http://%s/install/pallets/%s/%s/%s/%s/%s' % \
-			('&Kickstart_PrivateAddress;', o['name'], o['version'],				o['release'], o['os'], o['arch'])
+			('127.0.0.1', o['name'], o['version'],				o['release'], o['os'], o['arch'])
 		print 'assumeyes=1'
 		print 'gpgcheck=0\n'
 
@@ -83,12 +84,14 @@ for o in stack.api.Call('list cart'):
 		print '&lt;stack:repo&gt; --name="%s" --baseurl=http://127.0.0.1/install/carts/%s&lt;/stack:repo&gt;' % (o['name'], o['name'])
 		print '[cart-%s]' % (o['name'])
 		print 'name=cart %s' % (o['name'])
-		print 'baseurl=http://&Kickstart_PrivateAddress;/install/carts/%s' % (o['name'])
+		print 'baseurl=http://127.0.0.1/install/carts/%s' % (o['name'])
 		print 'assumeyes=1'
 		print 'gpgcheck=0\n'
 </eval>
 </file>
 
+<!-- turn lighttpd on -->
+/opt/lighttpd/sbin/lighttpd -f /opt/lighttpd/conf/lighttpd.conf -m /opt/lighttpd/lib/
 </pre>
 
 
