@@ -193,7 +193,7 @@ class Command(stack.commands.HostArgumentProcessor,
 						else:
 							self.addOutput('', '\tfilename\t\t"pxelinux.0";')
 							self.addOutput('', '\tserver-name\t\t"%s";' % server)
-							self.addOutput('', '\tnext-server\t\t"%s";' % server)
+							self.addOutput('', '\tnext-server\t\t%s;' % server)
                                 
                                         self.addOutput('', '}')
 
