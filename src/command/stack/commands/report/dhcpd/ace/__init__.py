@@ -145,6 +145,8 @@ class Command(stack.commands.HostArgumentProcessor,
                 for name in data.keys():
                         kickstartable = self.str2bool(
                                 self.getHostAttr(name, 'kickstartable'))
+			
+			appliance = self.getHostAttr(name, "appliance")
                         
                        	mac = None
                        	ip  = None
@@ -181,10 +183,17 @@ class Command(stack.commands.HostArgumentProcessor,
                                                 server = servers.get(netname)
                                                 if not server:
                                                         server = servers.get('default')
-						self.addOutput('', '\toption root-path\t"%s:/export/nfs/install";' % server)
+						
+						if appliance.startswith("ace") or appliance == "frontend": 
+							self.addOutput('', '\toption root-path\t"%s:/export/nfs/install";' % server)
 
-                                        	self.addOutput('',
-							'%s' % vendor_option_space);
+							self.addOutput('',
+								'%s' % vendor_option_space);
+
+						else:
+							self.addOutput('', '\tfilename\t\t"pxelinux.0";')
+							self.addOutput('', '\tserver-name\t\t"%s";' % server)
+							self.addOutput('', '\tnext-server\t\t"%s";' % server)
                                 
                                         self.addOutput('', '}')
 
