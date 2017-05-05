@@ -269,6 +269,83 @@ them -- the frontend Pi will install all backend Pis that are listed in
 
 ---
 
+# Build x86 Backend(s)
+
+### Requirements before adding hosts
+* Grab the x86 isos for ***Stacki*** and ***OS***
+
+  ```
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/stackios-4.0_c4aff2a-7.x.x86_64.disk1.iso
+  
+    # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/os-7.3_11122da-7.x.x86_64.disk1.iso
+  ```
+
+* Add `x86` box.
+  
+  ```
+  # stack add box x86
+  ```
+
+* Add/enable the `os` pallet:
+  
+  ```
+  # stack add os-7.3_11122da-7.x.x86_64.disk1.iso
+  # stack enable pallet os box=x86 arch=x86_64
+  ```
+
+* Now add/enable the `stacki` pallet:
+
+  ```
+  # stack add pallet stacki-4.0_20170414_c4aff2a-7.x.x86_64.disk1.iso
+  # stack enable pallet stacki box=x86 arch=x86_64
+  ```
+  
+* Install the files needed for pxeboot
+
+  ```
+ # rpm -ivh --force --nodeps --ignorearch /export/stack/pallets/stacki/4.0_20170414_c4aff2a/7.x/redhat/x86_64/RPMS/stack-images-4.0_20170414_c4aff2a-7.x.x86_64.rpm 
+ # rpm -ivh --force --nodeps --ignorearch /export/stack/pallets/os/7.3_11122da/7.x/redhat/x86_64/RPMS/syslinux-4.05-13.el7.x86_64.rpm  
+
+  ```
+  
+* Copy files to pxeboot folder
+
+  ```
+  # cp /opt/stack/images/vmlinuz-4.0_20170414_c4aff2a-7.x-x86_64 /tftpboot/pxelinux/
+  # cp /opt/stack/images/initrd.img-4.0_20170414_c4aff2a-7.x-x86_64 /tftpboot/pxelinux/
+  # cp -r /usr/share/syslinux/* /tftpboot/pxelinux/
+  ```
+  
+* Add a boot action for x86 machines. Change `IP_ADDRESS` to the ip address of the frontend machine.
+
+  ```
+  # stack add bootaction action=install_x86 args="ip=bootif:dhcp inst.ks=https://IP_ADDRESS/install/sbin/profile.cgi inst.geoloc=0 inst.noverifyssl inst.ks.sendmac ramdisk_size=300000" kernel="vmlinuz-4.0_20170414_c4aff2a-7.x-x86_64" ramdisk="initrd.img-4.0_20170414_c4aff2a-7.x-x86_64"
+  ```
+
+### Adding Hosts
+
+* Add your x86 hosts to the spreadsheet the same way as before but for appliance type use something other than ace (e.g. backend).
+
+* Set the box for the host using the applaince name, otherwise the frontend will think it is installing another Pi.
+
+  ```
+  # stack set host box backend box=x86
+  ```
+  
+* Set the install action using appliance name
+
+  ```
+  # stack set host installaction backend action=install_x86
+  ```
+  
+* Set all the `backend` backend hosts to install:
+
+  ```
+  # stack set host boot backend action=install
+  ```
+  
+* Reboot and install your x86 machine. It is regular [Stacki](https://github.com/StackIQ/stacki) from here on out.
+
 # Full Stacki Documentation
 
 This guide only contains documentation that is specific to Stacki Ace.
