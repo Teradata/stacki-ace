@@ -302,10 +302,10 @@ them -- the frontend Pi will install all backend Pis that are listed in
   
 * Install the files needed for pxeboot
 
-  ```
- # rpm -ivh --force --nodeps --ignorearch /export/stack/pallets/stacki/4.0_20170414_c4aff2a/7.x/redhat/x86_64/RPMS/stack-images-4.0_20170414_c4aff2a-7.x.x86_64.rpm 
- # rpm -ivh --force --nodeps --ignorearch /export/stack/pallets/os/7.3_11122da/7.x/redhat/x86_64/RPMS/syslinux-4.05-13.el7.x86_64.rpm  
-
+  ``` 
+  # rpm -ivh --force --nodeps --ignorearch /export/stack/pallets/stacki/4.0_20170414_c4aff2a/7.x/redhat/x86_64/RPMS/stack-images-4.0_20170414_c4aff2a-7.x.x86_64.rpm 
+  
+  # rpm -ivh --force --nodeps --ignorearch /export/stack/pallets/os/7.3_11122da/7.x/redhat/x86_64/RPMS/syslinux-4.05-13.el7.x86_64.rpm  
   ```
   
 * Copy files to pxeboot folder
