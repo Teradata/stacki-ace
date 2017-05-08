@@ -149,12 +149,12 @@ sed -i 's/tmp/run/' /export/nfs/install/opt/lighttpd/conf/lighttpd.conf
 sed -i 's/&Kickstart_PrivateAddress;/127.0.0.1/' /export/nfs/install/etc/yum.repos.d/stacki.repo
 
 <!-- create boot image for ace-backends -->
-dd if=/dev/zero of=/opt/stack/images/boot.img bs=20M count=1
+dd if=/dev/zero of=/opt/stack/images/stack-ace.img bs=20M count=1
 
-parted /opt/stack/images/boot.img mklabel msdos
-parted /opt/stack/images/boot.img mkpart primary fat16 1 100%
+parted /opt/stack/images/stack-ace.img mklabel msdos
+parted /opt/stack/images/stack-ace.img mkpart primary fat16 1 100%
 
-losetup --offset 1048576 --sizelimit 25690112 --show --find /opt/stack/images/boot.img /dev/loop0
+losetup --offset 1048576 --sizelimit 25690112 --show --find /opt/stack/images/stack-ace.img /dev/loop0
 mkfs -t vfat /dev/loop0
 mount /dev/loop0 /media
 
