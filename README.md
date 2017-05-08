@@ -247,9 +247,11 @@ for a Raspberry Pi backend host.
   # stack set host boot ace action=install
   ```
 
-* Copy `stacki-centos.img` to the MicroSD card that will be used in the
+* Copy `stacki-ace.img` from '/opt/stack/images' on the **stacki-ace** frontend to the MicroSD card that will be used in the
 backend Pi (use the same procedure you used to copy `stacki-centos.img` to
 your frontend Pi's MicroSD card).
+
+> **Warning**: If you do this on the frontend Pi itself, it may shut off due some USB power issue with the Raspberry Pi. It is best to copy `stacki-ace.img` to the same machine you used to copy `stack-centos.img`.
 
 * Put the MicroSD card into your backend Pi and power it on.
 
