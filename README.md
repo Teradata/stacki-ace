@@ -251,7 +251,7 @@ for a Raspberry Pi backend host.
 backend Pi (use the same procedure you used to copy `stacki-centos.img` to
 your frontend Pi's MicroSD card).
 
-> **Warning**: If you do this on the frontend Pi itself, it may shut off due some USB power issue with the Raspberry Pi. It is best to copy `stacki-ace.img` to the same machine you used to copy `stack-centos.img`.
+> **Warning**: If you do this on the frontend Pi itself, it may shut off due some USB power issue with the Raspberry Pi. It is best to copy `stacki-ace.img` to the same machine you used to copy `stacki-centos.img`.
 
 * Put the MicroSD card into your backend Pi and power it on.
 
@@ -279,7 +279,7 @@ them -- the frontend Pi will install all backend Pis that are listed in
   ```
   # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/stackios-4.0_c4aff2a-7.x.x86_64.disk1.iso
   
-    # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/os-7.3_11122da-7.x.x86_64.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/os-7.3_11122da-7.x.x86_64.disk1.iso
   ```
 
 * Add `x86` box.
