@@ -1,5 +1,5 @@
 export ROLL		= stacki-ace
-export ROLLVERSION	= 4.0_$(shell date +%Y%m%d)
+export ROLLVERSION	= 4.1
 
 COLOR			= plum
 

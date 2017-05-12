@@ -123,7 +123,8 @@ class Command(stack.commands.HostArgumentProcessor,
 
 			ipnetwork  = ipaddress.IPv4Network(unicode(
 				network + '/' + netmask))
-            self.addOutput('', '\toption routers\t\t\t%s;' % gateway)
+
+			self.addOutput('', '\toption routers\t\t\t%s;' % gateway)
 			self.addOutput('', '\toption subnet-mask\t\t%s;' % netmask)
 			self.addOutput('', '\toption broadcast-address\t%s;' %
                         	ipnetwork.broadcast_address)
