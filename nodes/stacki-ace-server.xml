@@ -34,14 +34,14 @@ fudge 127.127.1.1 stratum 10
 driftfile /var/lib/ntp/drift
 </file>
 
-/usr/sbin/ntpdate -s pool.ntp.org
+/usr/sbin/ntpdate -s -u pool.ntp.org
 
 /usr/bin/systemctl enable ntpd
 /usr/bin/systemctl start ntpd
 
 <file name="/opt/stack/bin/stacki-time.sh" perms="700">
 #!/bin/sh
-/usr/sbin/ntpdate -s pool.ntp.org
+/usr/sbin/ntpdate -s -u pool.ntp.org
 </file>
 
 
