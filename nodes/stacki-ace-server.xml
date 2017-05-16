@@ -59,6 +59,10 @@ RPCSVCGSSDARGS=""
 BLKMAPDARGS=""
 </file>
 
+<!-- clean up before the rsync -->
+
+rm -rf /install
+
 mkdir -p /export/nfs/install
 
 <file name="/etc/exports">

@@ -85,6 +85,20 @@ echo "stacki-centos" | passwd root --stdin
 nameserver 8.8.8.8
 </file>
 
+
+<!--
+	make an export directory, this makes it look more like an
+	x86_64 frontend
+-->
+
+mkdir /export
+
+
+<!-- cleanup -->
+
+rm -rf /install
+rm /opt/stack/etc/profile.cfg
+
 </post>
 
 
