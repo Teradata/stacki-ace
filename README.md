@@ -71,7 +71,7 @@ the format *sdX*.
 Now let's copy *stacki-centos.img* to the MicroSD card.
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-centos.img
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/stacki-centos.img
 
   # dd if=stacki-centos.img of=/dev/sdd
   ```
@@ -90,11 +90,11 @@ all the free space on your MicroSD card.
 * Copy the Stacki Ace ISOs to the frontend:
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/os-7.3-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/os-7.3-7.x.armv7hl.disk1.iso
 
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-4.0_20170316-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/stacki-4.1-7.x.armv7hl.disk1.iso
 
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/stacki-ace-4.0_20170329-7.x.armv7hl.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/stacki-ace-4.1-7.x.armv7hl.disk1.iso
   ```
 
 * Download and execute `frontend-install.py`.
@@ -102,9 +102,9 @@ all the free space on your MicroSD card.
 > This will transform the Pi into a Stacki Ace frontend.
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/ace/frontend-install.py
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.1/open-source/ace/frontend-install.py
 
-  # ./frontend-install.py --stacki-iso=stacki-4.0_20170316-7.x.armv7hl.disk1.iso --stacki-version=4.0 --stacki-name=stacki
+  # ./frontend-install.py --stacki-iso=stacki-4.1-7.x.armv7hl.disk1.iso --stacki-version=4.1 --stacki-name=stacki --extra-iso=os-7.3-7.x.armv7hl.disk1.iso
   ```
 The above step will run several commands and will eventually display
 the Installation Wizard.
@@ -170,7 +170,7 @@ installation.
 * Now add/enable the `stacki-ace` pallet:
 
   ```
-  # stack add pallet stacki-ace-4.0_20170329-7.x.armv7hl.disk1.iso
+  # stack add pallet stacki-ace-4.1-7.x.armv7hl.disk1.iso
   # stack enable pallet stacki-ace
   ```
 
@@ -179,9 +179,9 @@ installation.
   ```
   # stack list pallet
   NAME       VERSION      RELEASE ARCH    OS     BOXES
-  stacki     4.0_20170316 7.x     armv7hl redhat default
+  stacki     4.1          7.x     armv7hl redhat default
   os         7.3          7.x     armv7hl redhat default
-  stacki-ace 4.0_20170329 7.x     armv7hl redhat default
+  stacki-ace 4.1          7.x     armv7hl redhat default
   ```
 
 * Apply the `stacki-ace` pallet to the frontend:
@@ -247,9 +247,11 @@ for a Raspberry Pi backend host.
   # stack set host boot ace action=install
   ```
 
-* Copy `stacki-centos.img` to the MicroSD card that will be used in the
+* Copy `stacki-ace.img` from '/opt/stack/images' on the **stacki-ace** frontend to the MicroSD card that will be used in the
 backend Pi (use the same procedure you used to copy `stacki-centos.img` to
 your frontend Pi's MicroSD card).
+
+> **Warning**: If you do this on the frontend Pi itself, it may shut off due some USB power issue with the Raspberry Pi. It is best to copy `stacki-ace.img` to the same machine you used to copy `stacki-centos.img`.
 
 * Put the MicroSD card into your backend Pi and power it on.
 
@@ -269,35 +271,35 @@ them -- the frontend Pi will install all backend Pis that are listed in
 
 ---
 
-# Build x86 Backend(s)
+# Build x86_64 Backend(s)
 
 ### Requirements before adding hosts
-* Grab the x86 isos for ***Stacki*** and ***OS***
+* Grab the x86_64 isos for ***Stacki*** and ***OS***
 
   ```
-  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/stackios-4.0_c4aff2a-7.x.x86_64.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/stacki-4.0_20170414_c4aff2a-7.x.x86_64.disk1.iso
   
-    # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/os-7.3_11122da-7.x.x86_64.disk1.iso
+  # wget http://stacki.s3.amazonaws.com/public/pallets/4.0/open-source/os-7.3_11122da-7.x.x86_64.disk1.iso
   ```
 
-* Add `x86` box.
+* Add `x86_64` box.
   
   ```
-  # stack add box x86
+  # stack add box x86_64
   ```
 
-* Add/enable the `os` pallet:
+* Add/enable the `os` pallet for the `x86_64` box:
   
   ```
   # stack add os-7.3_11122da-7.x.x86_64.disk1.iso
-  # stack enable pallet os box=x86 arch=x86_64
+  # stack enable pallet os arch=x86_64 box=x86_64
   ```
 
 * Now add/enable the `stacki` pallet:
 
   ```
   # stack add pallet stacki-4.0_20170414_c4aff2a-7.x.x86_64.disk1.iso
-  # stack enable pallet stacki box=x86 arch=x86_64
+  # stack enable pallet stacki arch=x86_64 box=x86_64 
   ```
   
 * Install the files needed for pxeboot
@@ -316,7 +318,7 @@ them -- the frontend Pi will install all backend Pis that are listed in
   # cp -r /usr/share/syslinux/* /tftpboot/pxelinux/
   ```
   
-* Add a boot action for x86 machines. Change `IP_ADDRESS` to the ip address of the frontend machine.
+* Add a boot action for x86_64 machines. Change `IP_ADDRESS` to the ip address of the frontend machine.
 
   ```
   # stack add bootaction action=install_x86 args="ip=bootif:dhcp inst.ks=https://IP_ADDRESS/install/sbin/profile.cgi inst.geoloc=0 inst.noverifyssl inst.ks.sendmac ramdisk_size=300000" kernel="vmlinuz-4.0_20170414_c4aff2a-7.x-x86_64" ramdisk="initrd.img-4.0_20170414_c4aff2a-7.x-x86_64"
@@ -324,12 +326,12 @@ them -- the frontend Pi will install all backend Pis that are listed in
 
 ### Adding Hosts
 
-* Add your x86 hosts to the spreadsheet the same way as before but for appliance type use something other than ace (e.g. backend).
+* Add your x86_64 hosts to the spreadsheet the same way as before but for appliance type use **backend**.
 
-* Set the box for the host using the applaince name, otherwise the frontend will think it is installing another Pi.
+* Set the box for the host using the appliance name, otherwise the frontend will think it is installing another Pi.
 
   ```
-  # stack set host box backend box=x86
+  # stack set host box backend box=x86_64
   ```
   
 * Set the install action using appliance name
@@ -344,7 +346,7 @@ them -- the frontend Pi will install all backend Pis that are listed in
   # stack set host boot backend action=install
   ```
   
-* Reboot and install your x86 machine. It is regular [Stacki](https://github.com/StackIQ/stacki) from here on out.
+* Reboot and install your x86_64 machine. It is regular [Stacki](https://github.com/StackIQ/stacki) from here on out.
 
 # Full Stacki Documentation
 

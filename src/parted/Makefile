@@ -50,7 +50,7 @@ build:
 	$(TAR) xf parted-$(VERSION).tar.xz
 	( 								\
 		cd parted-$(VERSION);					\
-		./configure --prefix=$(PKGROOT);			\
+		./configure --prefix=$(PKGROOT) --without-readline;	\
 		$(MAKE);						\
 	)
 

@@ -34,14 +34,14 @@ fudge 127.127.1.1 stratum 10
 driftfile /var/lib/ntp/drift
 </file>
 
-/usr/sbin/ntpdate -s pool.ntp.org
+/usr/sbin/ntpdate -s -u pool.ntp.org
 
 /usr/bin/systemctl enable ntpd
 /usr/bin/systemctl start ntpd
 
 <file name="/opt/stack/bin/stacki-time.sh" perms="700">
 #!/bin/sh
-/usr/sbin/ntpdate -s pool.ntp.org
+/usr/sbin/ntpdate -s -u pool.ntp.org
 </file>
 
 
@@ -58,6 +58,10 @@ GSS_USE_PROXY="yes"
 RPCSVCGSSDARGS=""
 BLKMAPDARGS=""
 </file>
+
+<!-- clean up before the rsync -->
+
+rm -rf /install
 
 mkdir -p /export/nfs/install
 
@@ -149,12 +153,12 @@ sed -i 's/tmp/run/' /export/nfs/install/opt/lighttpd/conf/lighttpd.conf
 sed -i 's/&Kickstart_PrivateAddress;/127.0.0.1/' /export/nfs/install/etc/yum.repos.d/stacki.repo
 
 <!-- create boot image for ace-backends -->
-dd if=/dev/zero of=/opt/stack/images/boot.img bs=20M count=1
+dd if=/dev/zero of=/opt/stack/images/stacki-ace.img bs=20M count=1
 
-parted /opt/stack/images/boot.img mklabel msdos
-parted /opt/stack/images/boot.img mkpart primary fat16 1 100%
+parted /opt/stack/images/stacki-ace.img mklabel msdos
+parted /opt/stack/images/stacki-ace.img mkpart primary fat16 1 100%
 
-losetup --offset 1048576 --sizelimit 25690112 --show --find /opt/stack/images/boot.img /dev/loop0
+losetup --offset 1048576 --sizelimit 25690112 --show --find /opt/stack/images/stacki-ace.img /dev/loop0
 mkfs -t vfat /dev/loop0
 mount /dev/loop0 /media
 
