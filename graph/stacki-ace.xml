@@ -21,5 +21,8 @@
 		<to>stacki-ace-time</to>
 	</edge>
 
+	<edge from="stacki-ace-client">
+		<to>ssh-client</to>
+	</edge>
 </graph>
 

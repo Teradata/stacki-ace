@@ -1,0 +1,84 @@
+<?xml version="1.0" standalone="no"?>
+
+
+<kickstart>
+
+<description>
+SSH Config for backend nodes and other non-frontend appliances.
+
+We are using one key pair among all SSH servers in the
+cluster. This implies we do not care about Man-in-the-Middle
+attacks. We have subverted the protection for these attacks for
+several releases (broadcastSSH).
+
+This logic should not be in the ssh.xml node so the frontend will
+generate its own keypair.
+</description>
+
+<si_copyright>
+(c) 2006 - 2017 StackIQ Inc.
+All rights reserved. stacki(r) v4.0 stacki.com
+</si_copyright>
+
+<copyright>
+Copyright (c) 2000 - 2010 The Regents of the University of California.
+All rights reserved. Rocks(r) v5.4 www.rocksclusters.org	
+</copyright>
+
+
+<post>
+
+<file name="/etc/ssh/ssh_host_rsa_key" perms="0400">
+<eval>
+/opt/stack/sbin/read-ssh-private-key RSA 2> /dev/null
+</eval>
+</file>
+
+<file name="/etc/ssh/ssh_host_rsa_key.pub" perms="0444">
+<eval>
+cat /etc/ssh/ssh_host_rsa_key.pub 2> /dev/null
+</eval>
+</file>
+
+</post>
+
+
+<post cond="not &ssh.use_dns;">
+
+<file name="/etc/ssh/sshd_config" mode="append">
+UseDNS no
+</file>
+
+</post>
+
+<post cond="'&release;' == '7.x'">
+
+<file name="/etc/ssh/ssh_host_ecdsa_key" perms="0400">
+<eval>
+/opt/stack/sbin/read-ssh-private-key ECDSA 2> /dev/null
+</eval>
+</file>
+
+<file name="/etc/ssh/ssh_host_ecdsa_key.pub" perms="0444">
+<eval>
+cat /etc/ssh/ssh_host_ecdsa_key.pub 2> /dev/null
+</eval>
+</file>
+
+<file name="/etc/ssh/ssh_host_ed25519_key" perms="0400">
+<eval>
+/opt/stack/sbin/read-ssh-private-key ED25519 2> /dev/null
+</eval>
+</file>
+
+<file name="/etc/ssh/ssh_host_ed25519_key.pub" perms="0444">
+<eval>
+cat /etc/ssh/ssh_host_ed25519_key.pub 2> /dev/null
+</eval>
+</file>
+
+</post>
+
+
+</kickstart>
+
