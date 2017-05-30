@@ -4,7 +4,7 @@ The best ARM on the team is an Ace.
 
 # Introduction
 
-An [overview](https://github.com/StackIQ/stacki/wiki]) of Stacki and the
+An [overview](https://github.com/StackIQ/stacki/wiki) of Stacki and the
 key [concepts](https://github.com/StackIQ/stacki/wiki/Concepts) can be found
 at their respective links.
 
