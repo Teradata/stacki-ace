@@ -168,6 +168,9 @@ cp /tftpboot/pxelinux/config.txt /media/
 
 umount /media
 losetup -d /dev/loop0
+
+<!-- disable stacki-install service on frontend -->
+systemctl disable stacki-install
 </post>
 
 
