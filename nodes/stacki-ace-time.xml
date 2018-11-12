@@ -1,15 +1,13 @@
-<?xml version="1.0" standalone="no"?>
-
-<kickstart>
+<stack:stack>
 
 
-<description>
-</description>
+<stack:description>
+</stack:description>
 
 
-<post>
+<stack:script stack:stage="install-post">
 
-<file name="/usr/lib/systemd/system/stacki-time.service">
+<stack:file stack:name="/usr/lib/systemd/system/stacki-time.service">
 [Unit]
 Description=stacki-time
 After=multi-user.target
@@ -22,13 +20,13 @@ RemainAfterExit=no
 
 [Install]
 WantedBy=multi-user.target
-</file>
+</stack:file>
 
 /usr/bin/systemctl enable stacki-time
 
 
-</post>
+</stack:script>
 
 
-</kickstart> 
+</stack:stack> 
 

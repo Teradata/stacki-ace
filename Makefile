@@ -10,3 +10,5 @@ ROLLROOT = .
 
 -include $(ROLLSBUILD)/etc/CCRolls.mk
 
+bootstrap:
+	yum -y install libuuid-devel

@@ -1,17 +1,15 @@
-<?xml version="1.0" standalone="no"?>
-
-<kickstart>
+<stack:stack>
 
 
-<description>
-</description>
+<stack:description>
+</stack:description>
 
 
-<package>
+<stack:package>
 ntp
-</package>
+</stack:package>
 
-<post>
+<stack:script stack:stage="install-post">
 
 if [ '&bootdisk;' == 'sda' ]
 then
@@ -27,9 +25,9 @@ fi
 
 <!-- boot loader config -->
 
-<file name="/boot/cmdline.txt" vars="expanded">
+<stack:file stack:name="/boot/cmdline.txt" stack:vars="expanded">
 dwc_otg.lpm_enable=0 root=/dev/$ROOTPART rootfstype=ext4 elevator=deadline rootwait frontend=&Kickstart_PrivateKickstartHost;
-</file>
+</stack:file>
 
 
 <!-- clean up repos -->
@@ -39,9 +37,9 @@ rm -f /etc/yum.repos.d/CentOS*.repo
 
 <!-- networking config -->
 
-<report name="host.network">&hostname;</report>
-<report name="host.interface">&hostname;</report>
-<report name="host.resolv">&hostname;</report>
+<stack:report stack:name="host.network">&hostname;</stack:report>
+<stack:report stack:name="host.interface">&hostname;</stack:report>
+<stack:report stack:name="host.resolv">&hostname;</stack:report>
 
 
 <!-- time config -->
@@ -49,21 +47,21 @@ rm -f /etc/yum.repos.d/CentOS*.repo
 rm -f /etc/localtime
 ln -s /usr/share/zoneinfo/&Kickstart_Timezone; /etc/localtime
 
-<file name="/opt/stack/bin/stacki-time.sh" perms="700">
+<stack:file stack:name="/opt/stack/bin/stacki-time.sh" stack:perms="700">
 #!/bin/sh
 /usr/sbin/ntpdate -s &Kickstart_PrivateNTPHost;
-</file>
+</stack:file>
 
 
 <!-- yum config -->
 
-<report name="host.yum">&hostname;</report>
+<stack:report stack:name="host.yum">&hostname;</report>
 
 
-</post>
+</stack:script>
 
 
-<post cond="&sync.ssh.authkey;">
+<stack:script stack:stage="install-post" stack:cond="&sync.ssh.authkey;">
 <!-- distribute root's public ssh key -->
 
 for i in "/root/.ssh" ; do
@@ -72,18 +70,18 @@ for i in "/root/.ssh" ; do
 	fi
 done
 
-<file name="/root/.ssh/authorized_keys">
-<eval shell="sh">
+<stack:file stack:name="/root/.ssh/authorized_keys">
+<stack:eval stack:shell="sh">
 cat /root/.ssh/id_rsa.pub
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
-</post>
+</stack:script>
 
 
 <!-- set the root password -->
 
-<post interpreter="/opt/stack/bin/python">
+<stack:script stack:stage="install-post" stack:interpreter="/opt/stack/bin/python">
 import shutil
 
 f = open('/etc/shadow', 'r')
@@ -100,8 +98,8 @@ f.close()
 newshadow.close()
 
 shutil.move('/etc/shadow.new', '/etc/shadow')
-</post>
+</stack:script>
 
 
-</kickstart> 
+</stack:stack> 
 

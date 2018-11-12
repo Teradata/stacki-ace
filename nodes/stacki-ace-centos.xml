@@ -1,21 +1,19 @@
-<?xml version="1.0" standalone="no"?>
-
-<kickstart>
+<stack:stack>
 
 
-<description>
+<stack:description>
 This defines a generic CentOS machine that will be used as the base image
 (e.g., stacki-centos.img)
-</description>
+</stack:description>
 
 
-<package>
+<stack:package>
 foundation-parted
 wget
-</package>
+</stack:package>
 
 
-<post>
+<stack:script stack:stage="install-post">
 
 if [ '&bootdisk;' == 'sda' ]
 then
@@ -32,9 +30,9 @@ fi
 
 <!-- boot loader config -->
 
-<file name="/boot/cmdline.txt" vars="expanded">
+<stack:file stack:name="/boot/cmdline.txt" stack:vars="expanded">
 dwc_otg.lpm_enable=0 root=/dev/$ROOTPART rootfstype=ext4 elevator=deadline rootwait
-</file>
+</stack:file>
 
 
 <!-- need to remove httpd to successfully execute a barnacle install -->
@@ -54,17 +52,17 @@ sed --in-place -e 's/\$kvariant/rpi2/' \
 
 <!-- networking config -->
 
-<file name="/etc/sysconfig/network">
+<stack:file stack:name="/etc/sysconfig/network">
 NETWORKING=yes
 HOSTNAME=localhost.localdomain
-</file>
+</stack:file>
 
-<file name="/etc/sysconfig/network-scripts/ifcfg-eth0">
+<stack:file stack:name="/etc/sysconfig/network-scripts/ifcfg-eth0">
 DEVICE=eth0
 BOOTPROTO=dhcp
 ONBOOT=yes
 MTU=1500
-</file>
+</stack:file>
 
 
 <!-- set the root password -->
@@ -81,9 +79,9 @@ echo "stacki-centos" | passwd root --stdin
 
 <!-- put in a default name server -->
 
-<file name="/etc/resolv.conf">
+<stack:file stack:name="/etc/resolv.conf">
 nameserver 8.8.8.8
-</file>
+</stack:file>
 
 
 <!--
@@ -99,8 +97,8 @@ mkdir /export
 rm -rf /install
 rm /opt/stack/etc/profile.cfg
 
-</post>
+</stack:script>
 
 
-</kickstart> 
+</stack:stack> 
 

@@ -1,13 +1,11 @@
-<?xml version="1.0" standalone="no"?>
-
-<kickstart>
+<stack:stack>
 
 
-<description>
-</description>
+<stack:description>
+</stack:description>
 
 
-<pre>
+<stack:script stack:stage="install-pre">
 
 if [ '&bootdisk;' == 'sda' ]
 then
@@ -53,8 +51,8 @@ mkdir -p /run/mnt/sysimage
 mkdir -p /run/mnt/sysimage/etc/yum.repos.d
 mkdir -p /run/mnt/sysimage/install
 
-<file name="/run/mnt/sysimage/etc/yum.repos.d/stacki.repo">
-<eval shell="/opt/stack/bin/python">
+<stack:file stack:name="/run/mnt/sysimage/etc/yum.repos.d/stacki.repo">
+<stack:eval stack:shell="/opt/stack/bin/python">
 import stack.api
 
 #
@@ -72,7 +70,7 @@ for o in listpallet:
 	boxes = o['boxes'].split()
 	if '&box;' in boxes:
 		print '[%s-%s-%s]' % (o['name'], o['version'], o['release'])
-		print 'name=%s %s %s' % (o['name'], o['version'], o['release'])
+		print 'stack:name=%s %s %s' % (o['name'], o['version'], o['release'])
 		print 'baseurl=http://%s/install/pallets/%s/%s/%s/%s/%s' % \
 			('127.0.0.1', o['name'], o['version'],				o['release'], o['os'], o['arch'])
 		print 'assumeyes=1'
@@ -81,23 +79,23 @@ for o in listpallet:
 for o in stack.api.Call('list cart'):
 	boxes = o['boxes'].split()
 	if '&box;' in boxes:
-		print '&lt;stack:repo&gt; --name="%s" --baseurl=http://127.0.0.1/install/carts/%s&lt;/stack:repo&gt;' % (o['name'], o['name'])
+		print '&lt;stack:repo&gt; --stack:name="%s" --baseurl=http://127.0.0.1/install/carts/%s&lt;/stack:repo&gt;' % (o['name'], o['name'])
 		print '[cart-%s]' % (o['name'])
-		print 'name=cart %s' % (o['name'])
+		print 'stack:name=cart %s' % (o['name'])
 		print 'baseurl=http://127.0.0.1/install/carts/%s' % (o['name'])
 		print 'assumeyes=1'
 		print 'gpgcheck=0\n'
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
 <!-- turn lighttpd on -->
 /opt/lighttpd/sbin/lighttpd -f /opt/lighttpd/conf/lighttpd.conf -m /opt/lighttpd/lib/
-</pre>
+</stack:pre>
 
 
-<package>
+<stack:package>
 @core
-pykickstart
+pystack
 raspberrypi2-kernel
 raspberrypi2-firmware
 raspberrypi2-kernel-firmware
@@ -108,10 +106,10 @@ stacki-ace-install
 stacki-ace-profile
 stack-command
 stack-pylib
-</package>
+</stack:package>
 
 
-<post>
+<stack:script stack:stage="install-post">
 
 if [ '&bootdisk;' == 'sda' ]
 then
@@ -126,24 +124,24 @@ then
 fi
 
 
-<file name="/boot/config.txt">
+<stack:file stack:name="/boot/config.txt">
 program_usb_boot_mode=1
-</file>
+</stack:file>
 
 
 <!-- write fstab -->
 
-<file name="/etc/fstab" vars="expanded">
+<stack:file stack:name="/etc/fstab" stack:vars="expanded">
 /dev/$BOOTPART /boot vfat noatime 0 0
 /dev/$ROOTPART / ext4 noatime 0 0
-</file>
+</stack:file>
 
 
 <!-- disable selinux -->
 
-<file name="/etc/selinux/config">
+<stack:file stack:name="/etc/selinux/config">
 SELINUX=disabled
-</file>
+</stack:file>
 
 
 <!-- turn on our "fake" PXE solution -->
@@ -158,8 +156,8 @@ cp /opt/stack/systemd/stacki-install.service /usr/lib/systemd/system/
 	https://&Kickstart_PrivateAddress;/install/sbin/public/setPxeboot.cgi?params='\{"action":"os"\}'
 
 
-</post>
+</stack:script>
 
 
-</kickstart> 
+</stack:stack> 
 

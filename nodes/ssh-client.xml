@@ -1,9 +1,6 @@
-<?xml version="1.0" standalone="no"?>
+<stack:stack>
 
-
-<kickstart>
-
-<description>
+<stack:description>
 SSH Config for backend nodes and other non-frontend appliances.
 
 We are using one key pair among all SSH servers in the
@@ -13,72 +10,61 @@ several releases (broadcastSSH).
 
 This logic should not be in the ssh.xml node so the frontend will
 generate its own keypair.
-</description>
+</stack:description>
 
-<si_copyright>
-(c) 2006 - 2017 StackIQ Inc.
-All rights reserved. stacki(r) v4.0 stacki.com
-</si_copyright>
+<stack:script stack:stage="install-script">
 
-<copyright>
-Copyright (c) 2000 - 2010 The Regents of the University of California.
-All rights reserved. Rocks(r) v5.4 www.rocksclusters.org	
-</copyright>
-
-
-<post>
-
-<file name="/etc/ssh/ssh_host_rsa_key" perms="0400">
-<eval>
+<stack:file stack::name="/etc/ssh/ssh_host_rsa_key" stack::perms="0400">
+<stack:eval>
 /opt/stack/sbin/read-ssh-private-key RSA 2> /dev/null
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
-<file name="/etc/ssh/ssh_host_rsa_key.pub" perms="0444">
-<eval>
+<stack:file stack::name="/etc/ssh/ssh_host_rsa_key.pub" stack::perms="0444">
+<stack:eval>
 cat /etc/ssh/ssh_host_rsa_key.pub 2> /dev/null
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
-</post>
+</stack:script>
 
 
-<post cond="not &ssh.use_dns;">
+<stack:script stack:stage="install-script" stack:cond="not &ssh.use_dns;">
 
-<file name="/etc/ssh/sshd_config" mode="append">
+<stack:file stack::name="/etc/ssh/sshd_config" stack:mode="append">
 UseDNS no
-</file>
+</stack:file>
 
-</post>
+</stack:script>
 
-<post cond="'&release;' == '7.x'">
+<stack:script stack:cond="'&release;' == '7.x'">
 
-<file name="/etc/ssh/ssh_host_ecdsa_key" perms="0400">
-<eval>
+<stack:file stack::name="/etc/ssh/ssh_host_ecdsa_key" stack::perms="0400">
+<stack:eval>
 /opt/stack/sbin/read-ssh-private-key ECDSA 2> /dev/null
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
-<file name="/etc/ssh/ssh_host_ecdsa_key.pub" perms="0444">
-<eval>
+<stack:file stack::name="/etc/ssh/ssh_host_ecdsa_key.pub" stack::perms="0444">
+<stack:eval>
 cat /etc/ssh/ssh_host_ecdsa_key.pub 2> /dev/null
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
-<file name="/etc/ssh/ssh_host_ed25519_key" perms="0400">
-<eval>
+<stack:file stack::name="/etc/ssh/ssh_host_ed25519_key" stack::perms="0400">
+<stack:eval>
 /opt/stack/sbin/read-ssh-private-key ED25519 2> /dev/null
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
-<file name="/etc/ssh/ssh_host_ed25519_key.pub" perms="0444">
-<eval>
+<stack:file stack:name="/etc/ssh/ssh_host_ed25519_key.pub" stack:perms="0444">
+<stack:eval>
 cat /etc/ssh/ssh_host_ed25519_key.pub 2> /dev/null
-</eval>
-</file>
+</stack:eval>
+</stack:file>
 
-</post>
+</stack:script>
 
 
-</kickstart>
+</stack:stack>
 

@@ -1,53 +1,51 @@
-<?xml version="1.0" standalone="no"?>
-
-<kickstart>
+<stack:stack>
 
 
-<description>
-</description>
+<stack:description>
+</stack:description>
 
 
-<package>stacki-ace-install</package>
-<package>stacki-ace-images</package>
-<package>stacki-ace-profile</package>
-<package>stacki-ace-command</package>
+<stack:package>stacki-ace-install</stack:package>
+<stack:package>stacki-ace-images</stack:package>
+<stack:package>stacki-ace-profile</stack:package>
+<stack:package>stacki-ace-command</stack:package>
 
-<package>nfs-utils</package>
-<package>dosfstools</package>
-<package>ntp</package>
+<stack:package>nfs-utils</stack:package>
+<stack:package>dosfstools</stack:package>
+<stack:package>ntp</stack:package>
 
-<package>lighttpd</package>
+<stack:package>lighttpd</stack:package>
 
 
-<post>
+<stack:script stack:stage="install-post">
 
 <!-- time configuration -->
 
-<file name="/etc/sysconfig/ntpd">
+<stack:file stack:name="/etc/sysconfig/ntpd">
 OPTIONS="-A -u ntp:ntp -p /var/run/ntpd.pid"
-</file>
+</stack:file>
 
-<file name="/etc/ntp.conf">
+<stack:file stack:name="/etc/ntp.conf">
 server pool.ntp.org iburst
 server 127.127.1.1 iburst
 fudge 127.127.1.1 stratum 10
 driftfile /var/lib/ntp/drift
-</file>
+</stack:file>
 
 /usr/sbin/ntpdate -s -u pool.ntp.org
 
 /usr/bin/systemctl enable ntpd
 /usr/bin/systemctl start ntpd
 
-<file name="/opt/stack/bin/stacki-time.sh" perms="700">
+<stack:file stack:name="/opt/stack/bin/stacki-time.sh" stack:perms="700">
 #!/bin/sh
 /usr/sbin/ntpdate -s -u pool.ntp.org
-</file>
+</stack:file>
 
 
 <!-- configure the NFS server to accept v2 requests -->
 
-<file name="/etc/sysconfig/nfs">
+<stack:file stack:name="/etc/sysconfig/nfs">
 RPCNFSDARGS="-V 2"
 RPCMOUNTDOPTS=""
 STATDARG=""
@@ -57,7 +55,7 @@ RPCGSSDARGS=""
 GSS_USE_PROXY="yes"
 RPCSVCGSSDARGS=""
 BLKMAPDARGS=""
-</file>
+</stack:file>
 
 <!-- clean up before the rsync -->
 
@@ -65,9 +63,9 @@ rm -rf /install
 
 mkdir -p /export/nfs/install
 
-<file name="/etc/exports">
+<stack:file stack:name="/etc/exports">
 /export/nfs/install &Kickstart_PrivateNetwork;/&Kickstart_PrivateNetmaskCIDR;(rw,sync,no_subtree_check,no_root_squash,insecure)
-</file>
+</stack:file>
 
 rsync -xa --exclude /export / /export/nfs/install
 
@@ -76,17 +74,17 @@ rm /export/nfs/install/etc/hostname
 rm /export/nfs/install/etc/sysconfig/network
 rm /export/nfs/install/etc/sysconfig/network-scripts/ifcfg-eth*
 
-<file name="/export/nfs/install/etc/sysconfig/network-scripts/ifcfg-eth0">
+<stack:file stack:name="/export/nfs/install/etc/sysconfig/network-scripts/ifcfg-eth0">
 DEVICE=eth0
 BOOTPROTO=dhcp
 ONBOOT=yes
 MTU=1500
-</file>
+</stack:file>
 
-<file name="/export/nfs/install/tmp/stack.conf">
+<stack:file stack:name="/export/nfs/install/tmp/stack.conf">
 var.trackers = "&Kickstart_PrivateAddress;"
 var.pkgservers = "&Kickstart_PrivateAddress;"
-</file>
+</stack:file>
 
 cp /opt/stack/systemd/stacki-install.service /export/nfs/install/usr/lib/systemd/system/
 
@@ -94,46 +92,46 @@ echo "/usr/bin/systemctl enable stacki-install" > /export/nfs/install/tmp/system
 chmod a+x /export/nfs/install/tmp/systemctl.stacki
 
 chroot /export/nfs/install /tmp/systemctl.stacki
-</post>
+</stack:script>
 
 
-<post>
+<stack:script stack:stage="install-post">
 mkdir -p /tftpboot/pxelinux/
 cp /opt/stack/images/armv7hl/* /tftpboot/pxelinux/
 
-<file name="/tftpboot/pxelinux/cmdline.txt">
+<stack:file stack:name="/tftpboot/pxelinux/cmdline.txt">
 root=/dev/nfs nfsroot=&Kickstart_PrivateAddress;:/export/nfs/install rootwait ip=dhcp frontend=&Kickstart_PrivateAddress;
-</file>
+</stack:file>
 
-<file name="/tftpboot/pxelinux/config.txt">
+<stack:file stack:name="/tftpboot/pxelinux/config.txt">
 program_usb_boot_mode=1
 program_usb_timeout=1
-</file>
+</stack:file>
 
-</post>
+</stack:script>
 
-<post>
+<stack:script stack:stage="install-post">
 /usr/bin/systemctl enable nfs-server
 
 /usr/sbin/exportfs -r
 
 /usr/bin/systemctl start nfs-server
-</post>
+</stack:script>
 
-<post>
+<stack:script stack:stage="install-post">
 
 <!-- default ACE backend node -->
 
 /opt/stack/bin/stack add appliance ace longname=ACE
 /opt/stack/bin/stack set appliance attr ace attr=managed value=true
-/opt/stack/bin/stack set appliance attr ace attr=kickstartable value=yes
+/opt/stack/bin/stack set appliance attr ace attr=stackable value=yes
 /opt/stack/bin/stack set appliance attr ace attr=node value=stacki-ace-backend
 
 <!-- backend node used to build a generic CentOS image -->
 
 /opt/stack/bin/stack add appliance ace-centos longname=ACE-CentOS 
 /opt/stack/bin/stack set appliance attr ace-centos attr=managed value=true
-/opt/stack/bin/stack set appliance attr ace-centos attr=kickstartable value=yes
+/opt/stack/bin/stack set appliance attr ace-centos attr=stackable value=yes
 /opt/stack/bin/stack set appliance attr ace-centos attr=node \
 	value=stacki-ace-centos
 
@@ -171,7 +169,7 @@ losetup -d /dev/loop0
 
 <!-- disable stacki-install service on frontend -->
 systemctl disable stacki-install
-</post>
+</stack:script>
 
 
-</kickstart> 
+</stack:stack> 

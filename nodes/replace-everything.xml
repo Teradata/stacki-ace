@@ -1,17 +1,14 @@
-<?xml version="1.0" standalone="no"?>
+<stack:stack>
 
-<kickstart>
-
-
-<description>
-</description>
+<stack:description>
+</stack:description>
 
 
-<package>
+<stack:package>
 raspberrypi2-kernel
 raspberrypi2-firmware
 raspberrypi2-kernel-firmware
-</package>
+</stack:package>
 
 
-</kickstart> 
+</stack:stack> 
